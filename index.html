@@ -271,7 +271,7 @@ function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t
 const STORAGE_KEY="ped-recruit-v3";
 const DEFAULT_DATA={
   prospect:{name:"",age:"",job:"",mode:"full",income:20000,raise:3,note:""},
-  agent:{target:40000,targetUnit:"month",r1:25,r2:10,r3:5,r4:5,r5:5,billing:"annual",premium:20000,persist:85},
+  agent:{cases:4,target:40000,targetUnit:"month",r1:25,r2:10,r3:5,r4:5,r5:5,billing:"annual",premium:20000,persist:85},
   um:{position:"unit2",includeOwn:false,inSummary:true,newPerYear:[0,3,3,3,3],retention:80},
   steps:DEF_STEPS
 };
@@ -320,7 +320,7 @@ function solveCases(a){
   for(let c=1;c<=200;c++){const x=Object.assign({},a,{cases:c});if(agentYear(simAgent(x),0,x).total>=tgt)return {cases:c,reached:true}}
   return {cases:200,reached:false};
 }
-function effAgent(a){if(a.fixedCases)return Object.assign({},a,{reached:true});const s=solveCases(a);return Object.assign({},a,{cases:s.cases,reached:s.reached})}
+function effAgent(a){const s=solveCases(a);return Object.assign({},a,{cases:Math.max(0,Math.round(+a.cases||0)),need:s.cases,reached:s.reached})}
 // ผลประโยชน์ตัวแทน 1 ปี — เกณฑ์เดียวกับ UM Year Plan + ค่าเก็บเบี้ยรายปี + CAREER (Agent Income Planner)
 function agentYear(M,y,a){
   const persist=y===0?YEAR1_PERSIST:a.persist;
@@ -448,9 +448,10 @@ function renderAgentTab(Y){
     ${togHead("assume","📝 สมมติฐานผลงาน")}
     ${collapsed.assume?'':`
     <p class="sub">ใช้แทนการบันทึกผลงานรายกรมธรรม์ · ขายเท่ากันทุกเดือนต่อเนื่อง 5 ปี</p>
-    <div class="step-lbl">1. รายได้ที่ต้องการ</div>
-    <div class="form-grid">${field("จำนวนเงิน (บาท)",numIn("agent.target",a.target))}
-      ${field("ต่อ",`<select data-bind="agent.targetUnit"><option value="month" ${a.targetUnit==="month"?"selected":""}>ต่อเดือน</option><option value="year" ${a.targetUnit==="year"?"selected":""}>ต่อปี</option></select>`)}</div>
+    <div class="step-lbl">1. รายได้ที่ต้องการและจำนวนรายที่จะขาย</div>
+    <div class="form-grid c3">${field("รายได้ที่ต้องการ (บาท)",numIn("agent.target",a.target))}
+      ${field("ต่อ",`<select data-bind="agent.targetUnit"><option value="month" ${a.targetUnit==="month"?"selected":""}>ต่อเดือน</option><option value="year" ${a.targetUnit==="year"?"selected":""}>ต่อปี</option></select>`)}
+      ${field("ขายเดือนละ (ราย)",numIn("agent.cases",a.cases))}</div>
     <div class="step-lbl">2. ค่าคอมมิชชั่น (%)</div>
     <div class="form-grid c5">${[1,2,3,4,5].map(k=>field(`ปีที่ ${k}`,numIn("agent.r"+k,a["r"+k]))).join("")}</div>
     <div class="step-lbl">3–5. การเก็บเบี้ยและอัตราคงอยู่</div>
@@ -459,15 +460,15 @@ function renderAgentTab(Y){
       ${field(`เบี้ยประกันต่อราย (${MODE_UNIT[a.billing]})`,numIn("agent.premium",a.premium))}
       ${field("อัตราคงอยู่ ปีที่ 2 ขึ้นไป (%)",numIn("agent.persist",a.persist))}
     </div>
-    <div class="result-box ${A.reached?'':'warn'}">
-      ${A.reached?`ต้องขายเดือนละ <b>${A.cases} ราย</b> (ปีละ ${A.cases*12} ราย) จึงได้รายได้ปีที่ 1 ถึง ${THB(a.target)} ${a.targetUnit==="year"?"ต่อปี":"ต่อเดือน"}`:`ขายเดือนละ 200 รายยังไม่ถึงเป้า — ลองปรับเบี้ยหรือ % คอม`}
-    </div>
+    ${(()=>{const y1=Y.ag[0].total,tg=(+a.target||0)*(a.targetUnit==="year"?1:12),unit=a.targetUnit==="year"?"ต่อปี":"ต่อเดือน",show=a.targetUnit==="year"?y1:y1/12;
+      if(!tg)return '';
+      if(y1>=tg)return `<div class="result-box">✔ ขายเดือนละ ${A.cases} ราย ได้ปีที่ 1 ประมาณ <b>${THB(show)}</b> ${unit} — ถึงเป้า ${THB(a.target)} แล้ว${A.need<A.cases?` (ขั้นต่ำที่ถึงเป้าคือ ${A.need} ราย)`:''}</div>`;
+      return `<div class="result-box warn">⚠ ขายเดือนละ ${A.cases} ราย ได้ปีที่ 1 ประมาณ <b style="color:var(--bad)">${THB(show)}</b> ${unit} — ยังไม่ถึงเป้า ${THB(a.target)}<br>${A.reached?`ต้องขายเดือนละ ${A.need} ราย (ขาดอีก ${A.need-A.cases} ราย)`:'ขายเดือนละ 200 รายยังไม่ถึง ลองปรับเบี้ยหรือ % คอม'}</div>`})()}
     <div class="preview">เบี้ยต่อปีต่อราย ${THB(annualPrem)} · FYC ต่อราย ${THB(fyc1)} — ${schedTxt}<br>ปีที่ 1 ใช้อัตราคงอยู่ 75% ตามระเบียบ (เฉพาะคำนวณโบนัส) · ปีที่ 2 ขึ้นไปใช้ ${a.persist}% ทั้งลดคอมปีต่อ คำนวณโบนัส และ CAREER</div>`}
   </div>
   ${benefitsCard(Y)}
   ${yearPicker()}
-  ${agentIncomeCard(R)}
-  ${fiveYearCard(Y)}
+  ${overviewCard(R)}
   ${quarterCard(R)}
   ${selYear===0?joiningCard(R):''}
   ${careerCard(Y)}
@@ -477,59 +478,33 @@ function benefitsCard(Y){
   const tot=k=>Y.ag.reduce((s,R)=>s+R.items[k],0);
   return `<div class="card">
     ${togHead("benefits","📋 ผลประโยชน์ตัวแทนทั้งหมด")}
-    ${collapsed.benefits?'':`<p class="sub">ทุกรายการที่คำนวณเป็นตัวเงินได้ แยกรายปี (บาท)</p>
+    ${collapsed.benefits?'':`<p class="sub">ทุกรายการที่คำนวณเป็นตัวเงินได้ แยกรายปี (บาท) · แตะ "ปีที่ดู" ด้านล่างเพื่อดูรายละเอียดรายไตรมาส</p>
     <div class="scroll"><table>
       <thead><tr><th>ผลประโยชน์</th>${Y.ag.map((_,y)=>`<th class="r">ปี ${y+1}</th>`).join("")}<th class="r">รวม 5 ปี</th></tr></thead>
-      <tbody>${BENEFITS.map(([k,l,c])=>`<tr><td style="white-space:normal;min-width:190px"><b style="color:var(--navy-deep)">${l}</b><div style="font-size:14px;color:var(--muted2);line-height:1.35">${c(Y.A)}</div></td>
+      <tbody><tr><td><b style="color:var(--navy-deep)">จำนวนราย</b><div style="font-size:14px;color:var(--muted2)">ขายเดือนละ ${Y.A.cases} ราย</div></td>${Y.ag.map(R=>`<td class="num">${C1(R.cases)}</td>`).join("")}<td class="num">${C1(Y.ag.reduce((s,R)=>s+R.cases,0))}</td></tr>
+      ${BENEFITS.map(([k,l,c])=>`<tr><td style="white-space:normal;min-width:190px"><b style="color:var(--navy-deep)">${l}</b><div style="font-size:14px;color:var(--muted2);line-height:1.35">${c(Y.A)}</div></td>
         ${Y.ag.map(R=>`<td class="num" style="color:${R.items[k]?'var(--navy-deep)':'var(--muted2)'}">${THB(R.items[k])}</td>`).join("")}<td class="num" style="color:var(--good)">${THB(tot(k))}</td></tr>`).join("")}
         <tr class="sum"><td>รวมทั้งหมด</td>${Y.ag.map(R=>`<td class="num">${THB(R.total)}</td>`).join("")}<td class="num">${THB(Y.ag.reduce((s,R)=>s+R.total,0))}</td></tr>
-        <tr><td style="color:var(--muted2)">เฉลี่ยต่อเดือน</td>${Y.ag.map(R=>`<td class="num" style="color:var(--muted2)">${THB(R.total/12)}</td>`).join("")}<td></td></tr>
+        <tr><td style="font-weight:700;color:var(--navy)">เฉลี่ยต่อเดือน</td>${Y.ag.map(R=>`<td class="num" style="color:var(--good)">${THB(R.total/12)}</td>`).join("")}<td class="num" style="color:var(--good)">${THB(Y.ag.reduce((s,R)=>s+R.total,0)/60)}</td></tr>
       </tbody></table></div>`}
   </div>`;
 }
-function agentIncomeCard(R){
+function overviewCard(R){
   const qOver=R.qs.filter(r=>!r.qualifies).map(r=>`<div class="l no">⚠ ไตรมาส ${r.q} — คุณวุฒิไตรมาส: ${[r.count<QUALIFY_MIN_CASES?`ขาดอีก ${C1(QUALIFY_MIN_CASES-r.count)} ราย`:'',r.fyc<QUALIFY_MIN_FYC?`FYC ขาดอีก ${THB(QUALIFY_MIN_FYC-r.fyc)}`:'',r.activeMonths<2?`มีผลงานอีก ${2-r.activeMonths} เดือน`:''].filter(Boolean).join(' · ')}</div>`).join("");
+  const qbNo=R.qs.filter(r=>!r.bQualifies).map(r=>`<div class="l no">⚠ โบนัสไตรมาส ${r.q}: ${[r.count<3?`ขาดอีก ${C1(3-r.count)} ราย`:'',r.fyc<12500?`FYC ขาดอีก ${THB(12500-r.fyc)}`:''].filter(Boolean).join(' · ')||'อัตราคงอยู่ต้อง ≥ 75%'}</div>`).join("");
   const nextA=ANNUAL_TIER_RANGES.find(t=>t.min>R.fyc),C=R.career;
-  const chip=(l,v,w)=>`<div class="income-chip"><div class="lbl">${l}</div><div class="val">${THB(v)}</div><div class="when">${w}</div></div>`;
   return `<div class="card dark"><div class="grid-bg"></div>
-    <h3>รายได้รวม ปีที่ ${selYear+1}</h3>
+    <h3>📊 ภาพรวมสถานการณ์ ปีที่ ${selYear+1}</h3>
     <p class="sub">${C1(R.cases)} ราย · อัตราคงอยู่ที่ใช้ ${R.persist}%${selYear===0?' (ตามระเบียบปีแรก)':''}</p>
-    <div class="overview"><div class="t">📊 ภาพรวมสถานการณ์</div>
-      ${qOver||`<div class="l ok">คุณวุฒิไตรมาสผ่านครบทุกไตรมาส</div>`}
+    <div class="overview">
+      ${qOver||`<div class="l ok">✔ คุณวุฒิไตรมาสผ่านครบทุกไตรมาส${R.achievedLevel?` · รางวัล ${THB(R.reward)}`:''}</div>`}
+      ${qbNo||`<div class="l ok">✔ โบนัสไตรมาสได้ครบ 4 ไตรมาส</div>`}
       ${!R.annualBonusGate?`<div class="l no">⚠ โบนัสปี: ${[R.cases<12?`ขาดอีก ${C1(12-R.cases)} ราย`:'',R.fyc<50000?`FYC ขาดอีก ${THB(50000-R.fyc)}`:'',R.persist<75?'อัตราคงอยู่ต้อง ≥ 75%':''].filter(Boolean).join(' · ')}</div>`
         :nextA?`<div class="l">🎯 โบนัสปี ${R.annualBonusPct}% — ขาดอีก FYC ${THB(nextA.min-R.fyc)} จะขยับเป็น ${annualPct(nextA.min,R.band)}%</div>`:`<div class="l ok">🏆 โบนัสปี: อยู่ขั้นสูงสุดแล้ว</div>`}
       ${C.req?(C.qualifies?`<div class="l ok">✔ CAREER อายุงาน ${C.tenure} ปี: ได้ ${C.pct}% ของคอมปีต่อ</div>`:`<div class="l no">⚠ CAREER: ${[!C.casesOk?`ราย ≥ ${C.req.minCases}`:'',!C.fycOk?`FYC ≥ ${THB(C.req.minFYC)}`:'',!C.persistOk?`อัตราคงอยู่ ≥ ${C.req.minPersistency}%`:'',!C.activityOk?'มีผลงาน 9 ใน 12 เดือน':''].filter(Boolean).join(' · ')}</div>`):`<div class="l">CAREER เริ่มตั้งแต่อายุงานปีที่ 2</div>`}
     </div>
-    <div class="income-grid">
-      ${chip("ค่าคอมมิชชั่นปีแรก",R.fyc,"ทุกงวดที่เก็บเบี้ย")}
-      ${chip("ค่าคอมมิชชั่นปีต่อ",R.ren,selYear===0?"เริ่มปีที่ 2":"ทุกงวดปีต่อ")}
-      ${D.agent.billing==="annual"?chip("ค่าเก็บเบี้ยรายปี",R.collect,"10% ของคอมปีแรก"):''}
-      ${chip("โบนัสไตรมาส (รวม 4 ไตรมาส)",R.totalQuarterlyBonus,"ทุกไตรมาส")}
-      ${chip("โบนัสปี (สุทธิ)",R.annualBonusNet,"สิ้นปี")}
-      ${chip("เงินรางวัลคุณวุฒิไตรมาส",R.reward,"สิ้นปี")}
-      ${R.joining?chip("Joining Bonus",R.joining.total,"4 เดือนแรก"):''}
-      ${selYear>0?chip("CAREER",C.benefit,C.qualifies?`${C.pct}% ของคอมปีต่อ`:"ยังไม่ผ่านเกณฑ์"):''}
-    </div>
-    <div class="total-line"><span class="l">รวมรายได้ทั้งหมด · เฉลี่ย ${THB(R.total/12)}/เดือน</span><span class="v">${THB(R.total)}</span></div>
+    <div class="total-line"><span class="l">รายได้รวมปีนี้ · เฉลี่ย ${THB(R.total/12)}/เดือน</span><span class="v">${THB(R.total)}</span></div>
   </div>`;
-}
-function fiveYearCard(Y){
-  const rows=Y.ag.map((R,y)=>{
-    const open=!!openYears[y];
-    const head=`<tr class="yr ${open?'open':''}" data-open-year="${y}"><td>${open?'▼':'▶'} ปีที่ ${y+1}</td><td class="num">${C1(R.cases)}</td><td class="num">${THB(R.fyc)}</td><td class="num">${THB(R.ren)}</td><td class="num">${THB(R.total-R.fyc-R.ren)}</td><td class="num" style="color:var(--good)">${THB(R.total)}</td></tr>`;
-    if(!open)return head;
-    const mrows=R.ms.map((m,i)=>`<tr class="mrow"><td>${THAI_MONTH_SHORT[i]}</td><td class="num">${C1(m.cases)}</td><td class="num">${THB(m.fyc)}</td><td class="num">${THB(m.ren)}</td><td class="num">—</td><td class="num">${THB(m.fyc+m.ren)}</td></tr>`).join("");
-    const qrows=R.qs.map(r=>`<tr class="mrow"><td>โบนัสไตรมาส ${r.q}</td><td></td><td class="num">${THB(r.fyc)}</td><td></td><td class="num" style="color:${r.bQualifies?'var(--good)':'var(--bad)'}">${r.bQualifies?`${r.bPct}% = ${THB(r.bReward)}`:'✕ ไม่ผ่าน'}</td><td></td></tr>`).join("");
-    return head+mrows+qrows;
-  }).join("");
-  const t=Y.ag.reduce((s,R)=>({c:s.c+R.cases,f:s.f+R.fyc,r:s.r+R.ren,b:s.b+R.total-R.fyc-R.ren,tot:s.tot+R.total}),{c:0,f:0,r:0,b:0,tot:0});
-  return `<div class="card">
-    <h3>📅 ผลงาน 5 ปี</h3>
-    <p class="sub">แตะแต่ละปีเพื่อขยายดูรายเดือนและโบนัสไตรมาส</p>
-    <div class="scroll"><table>
-      <thead><tr><th>ปี / เดือน</th><th class="r">ราย</th><th class="r">คอมปีแรก</th><th class="r">คอมปีต่อ</th><th class="r">โบนัส/รางวัล</th><th class="r">รวม</th></tr></thead>
-      <tbody>${rows}<tr class="sum"><td>รวม 5 ปี</td><td class="num">${C1(t.c)}</td><td class="num">${THB(t.f)}</td><td class="num">${THB(t.r)}</td><td class="num">${THB(t.b)}</td><td class="num">${THB(t.tot)}</td></tr></tbody>
-    </table></div></div>`;
 }
 function careerCard(Y){
   return `<div class="card">
@@ -571,7 +546,7 @@ function labOut(){
       <tr><td>ใหม่</td>${nw.ag.map(R=>`<td class="r" style="font-size:17px">${THB(R.total)}</td>`).join("")}</tr></tbody></table></div>`;
 }
 function renderLab(Y){
-  if(!sandbox)sandbox=Object.assign({},Y.A,{fixedCases:true});
+  if(!sandbox)sandbox=Object.assign({},Y.A);
   return `<div class="card">
     <h3>🎛️ ลองปรับ</h3>
     <p class="sub">เลื่อนเพื่อดูว่ารายได้เปลี่ยนเท่าไร — ไม่กระทบสมมติฐานจนกว่าจะกด "ใช้ค่านี้"</p>
@@ -594,9 +569,9 @@ function quarterCard(R){
         <div class="line">· เดือนที่มีผลงาน ${short(2-r.activeMonths,r.activeMonths,2,"เดือน")}</div></div>`:''}
       <div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--line2)">
         <div style="font-size:16px;font-weight:700;color:var(--navy-deep);margin-bottom:4px">ผลงานรายเดือน</div>
-        <table class="qtable"><thead><tr><th>เดือน</th><th class="r">ราย</th><th class="r">FYC ที่ได้</th></tr></thead><tbody>
-          ${ms.map((m,i)=>`<tr><td>${THAI_MONTH_SHORT[qi*3+i]}</td><td class="r">${C1(m.cases)}</td><td class="r">${THB(m.fyc)}</td></tr>`).join("")}
-          <tr style="border-top:1.5px solid var(--line2)"><td style="color:var(--navy-deep);font-weight:700">รวม</td><td class="r">${C1(r.count)}</td><td class="r">${THB(r.fyc)}</td></tr>
+        <table class="qtable"><thead><tr><th>เดือน</th><th class="r">ราย</th><th class="r">คอมปีแรก</th><th class="r">คอมปีต่อ</th></tr></thead><tbody>
+          ${ms.map((m,i)=>`<tr><td>${THAI_MONTH_SHORT[qi*3+i]}</td><td class="r">${C1(m.cases)}</td><td class="r">${THB(m.fyc)}</td><td class="r" style="color:var(--muted2)">${THB(m.ren)}</td></tr>`).join("")}
+          <tr style="border-top:1.5px solid var(--line2)"><td style="color:var(--navy-deep);font-weight:700">รวม</td><td class="r">${C1(r.count)}</td><td class="r">${THB(r.fyc)}</td><td class="r" style="color:var(--muted2)">${THB(ms.reduce((s,m)=>s+m.ren,0))}</td></tr>
         </tbody></table>
       </div>
       <div class="bonus-box"><div class="title">โบนัสไตรมาสนี้ (เงินรางวัลตัวแทน)</div>
@@ -862,8 +837,7 @@ document.addEventListener("click",e=>{
   if(t.dataset.sub){agentSub=t.dataset.sub;render();return}
   if(t.dataset.labMode){const ann=sandbox.premium*MODE_INST[sandbox.billing];sandbox.billing=t.dataset.labMode;const r=LAB_RANGES[sandbox.billing];sandbox.premium=Math.min(r[1],Math.max(r[0],Math.round(ann/MODE_INST[sandbox.billing]/r[2])*r[2]));
     document.getElementById("lab-sliders").innerHTML=labSliders();document.getElementById("lab-out").innerHTML=labOut();return}
-  if(t.id==="lab-apply"){const nw=allYears(sandbox);["billing","premium","r1","r2","r3","r4","r5","persist"].forEach(k=>D.agent[k]=sandbox[k]);
-    D.agent.targetUnit="month";D.agent.target=Math.floor(nw.ag[0].total/12);sandbox=null;agentSub="perf";render();toast("ใช้ค่าใหม่แล้ว");return}
+  if(t.id==="lab-apply"){["cases","billing","premium","r1","r2","r3","r4","r5","persist"].forEach(k=>D.agent[k]=sandbox[k]);sandbox=null;agentSub="perf";render();toast("ใช้ค่าใหม่แล้ว");return}
   if(t.id==="lab-reset"){sandbox=null;render();return}
   if(t.dataset.toggleBox){collapsed[t.dataset.toggleBox]=!collapsed[t.dataset.toggleBox];render();return}
   if(t.dataset.openYear!==undefined){const y=+t.dataset.openYear;openYears[y]=!openYears[y];selYear=y;render();return}
