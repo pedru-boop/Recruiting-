@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Recruiting · ป้าเป็ด CFP®</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0F56B2">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Recruiting">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+    --navy:#0F56B2; --navy-deep:#082238; --gold:#4FAE74; --gold-soft:#9CE3B8;
+    --cream:#E7F2FB; --card:#FFFFFF; --ink:#1B2430; --muted:#000000; --muted2:#6B7280;
+    --good:#2F7A4F; --warn:#B8862E; --bad:#B4453B;
+    --line:#123F6B14; --line2:#123F6B22; --field:#fff; --soft:#F5F8FC;
+    --t1:#123F6B0C; --t2:#123F6B18; --t3:#123F6B24; --t4:#123F6B30;
+    --g1:#4FAE7412; --g2:#4FAE741E; --g3:#4FAE742C; --g4:#4FAE743A;
+    --alert:#FBF0EF; --tip:#FBF6E8; --okbg:#F1F8F3;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --navy:#6AA6F0; --navy-deep:#E3EDF8; --cream:#0B1624; --card:#132235; --ink:#E6EDF5; --muted:#C9D3E0; --muted2:#9AA8B8;
+    --good:#6FD39A; --bad:#F08A80; --line:#6AA6F01F; --line2:#6AA6F033; --field:#0F1C2C; --soft:#0F1C2C;
+    --t1:#6AA6F00F; --t2:#6AA6F01A; --t3:#6AA6F026; --t4:#6AA6F033; --alert:#3A1E1C; --tip:#2E2A1A; --okbg:#16301F; } }
+  :root[data-theme="dark"]{
+    --navy:#6AA6F0; --navy-deep:#E3EDF8; --cream:#0B1624; --card:#132235; --ink:#E6EDF5; --muted:#C9D3E0; --muted2:#9AA8B8;
+    --good:#6FD39A; --bad:#F08A80; --line:#6AA6F01F; --line2:#6AA6F033; --field:#0F1C2C; --soft:#0F1C2C;
+    --t1:#6AA6F00F; --t2:#6AA6F01A; --t3:#6AA6F026; --t4:#6AA6F033; --alert:#3A1E1C; --tip:#2E2A1A; --okbg:#16301F; }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{margin:0; background:var(--cream); color:var(--ink); font-family:'Sarabun','Noto Sans Thai',sans-serif;}
+  h1,h2,h3{font-family:'Fraunces','Sarabun',serif; margin:0;}
+  .mono{font-family:'Space Grotesk','Sarabun',sans-serif;}
+  header.top{background:linear-gradient(135deg,#082238 0%,#0F56B2 62%,#0F56B2 100%); position:relative; overflow:hidden;}
+  header.top .grid-bg{position:absolute; inset:0; background-image:linear-gradient(#4FAE740A 1px,transparent 1px),linear-gradient(90deg,#4FAE740A 1px,transparent 1px); background-size:26px 26px; pointer-events:none;}
+  header.top .glow{position:absolute; right:-60px; top:-60px; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle,#4FAE7433 0%,transparent 70%);}
+  header.top .inner{max-width:1080px; margin:0 auto; padding:28px 20px 24px; position:relative;}
+  .brand{display:flex; align-items:center; gap:16px; margin-bottom:10px;}
+  .brand{gap:20px;}
+  .brand .logo{width:140px; height:140px; border-radius:30px; overflow:hidden; box-shadow:0 4px 22px #00000066, 0 0 0 3px #ffffff33; flex-shrink:0;}
+  .brand .logo img{width:100%; height:100%; object-fit:cover; display:block;}
+  .brand .label{color:#4FAE74; font-size:17px; font-weight:600; font-family:'Space Grotesk','Sarabun',sans-serif; display:block; margin-bottom:4px;}
+  header.top h1{color:#fff; font-size:64px; font-weight:700; line-height:1.05; letter-spacing:.5px; text-shadow:0 2px 12px #00000055;}
+  header.top .th-name{display:block; color:#fff; font-size:22px; font-weight:600; margin-top:4px;}
+  header.top p{color:#C9D3E0; font-size:19px; margin:6px 0 0;}
+  .hdr-btns{position:absolute; top:14px; right:14px; z-index:5; display:flex; gap:6px;}
+  .hdr-btns button{background:#ffffff22; border:1px solid #ffffff44; border-radius:8px; padding:6px 9px; color:#fff; font-size:15px; font-weight:600; cursor:pointer; font-family:'Sarabun',sans-serif;}
+  nav.tabs{background:#0F56B2; border-bottom:3px solid #4FAE74; position:sticky; top:env(safe-area-inset-top,0px); z-index:20;}
+  nav.tabs .inner{max-width:1080px; margin:0 auto; display:flex; flex-wrap:wrap;}
+  nav.tabs .main{display:flex; overflow-x:auto; flex-basis:100%;}
+  nav.tabs button{display:flex; align-items:center; gap:8px; white-space:nowrap; padding:12px 18px; background:transparent; color:#D7DEEA; border:none; cursor:pointer; font-family:'Sarabun',sans-serif; font-size:20px; font-weight:500;}
+  nav.tabs button.active{background:var(--cream); color:var(--navy-deep); font-weight:600; border-radius:10px 10px 0 0;}
+  nav.tabs .sub-tabs{flex-basis:100%; display:flex; overflow-x:auto; background:#0A2E4D; border-top:1px solid #ffffff22;}
+  nav.tabs .sub-tabs button{font-size:17px; padding:9px 16px; color:#B9C4D6;}
+  nav.tabs .sub-tabs button.active{background:var(--cream); color:var(--navy-deep); border-radius:8px 8px 0 0;}
+  main{max-width:1080px; margin:0 auto; padding:16px 20px 64px; counter-reset:card-num;}
+  .year-picker{display:flex; align-items:center; gap:10px; margin:6px 0 14px; flex-wrap:wrap;}
+  .year-picker span{font-size:19px; color:var(--muted); font-weight:600;}
+  select,input[type=text],input[type=number]{border:1.5px solid var(--line2); border-radius:8px; padding:8px 10px; font-size:20px; font-family:'Sarabun',sans-serif; color:var(--ink); background:var(--field); outline:none; min-width:0;}
+  select:focus,input:focus,button:focus-visible,textarea:focus{outline:2px solid var(--gold); outline-offset:1px;}
+  textarea{width:100%; border:1.5px solid var(--line2); border-radius:8px; padding:8px 10px; font:400 18px 'Sarabun',sans-serif; color:var(--ink); background:var(--field);}
+  .year-picker select{padding:6px 12px; color:var(--navy-deep); background:var(--card); font-weight:600;}
+  .card{background:var(--card); border-radius:14px; padding:20px; box-shadow:0 1px 3px rgba(18,63,107,0.08),0 1px 2px rgba(18,63,107,0.06); border:1px solid var(--line); margin-bottom:16px; position:relative; overflow:hidden; counter-increment:card-num;}
+  .card::after{content:counter(card-num); position:absolute; top:8px; right:8px; width:26px; height:26px; border-radius:50%; background:var(--gold); color:#fff; font-size:14px; font-weight:700; font-family:'Space Grotesk',sans-serif; display:flex; align-items:center; justify-content:center; z-index:5; box-shadow:0 1px 3px rgba(0,0,0,0.25);}
+  .card.dark{background:linear-gradient(135deg,#082238 0%,#0F56B2 100%); border:none; color:#fff;}
+  .card.dark .grid-bg{position:absolute; inset:0; background-image:linear-gradient(#4FAE740D 1px,transparent 1px),linear-gradient(90deg,#4FAE740D 1px,transparent 1px); background-size:24px 24px; pointer-events:none;}
+  .card.dark > *{position:relative;}
+  .card h3{font-size:25px; color:var(--navy); font-weight:600; margin-bottom:4px; padding-right:30px;}
+  .card.dark h3{color:#fff;}
+  .card .sub{font-size:17.5px; color:var(--muted2); margin:-2px 0 14px;}
+  .card.dark .sub{color:#B9C4D6;}
+  h3.tog{cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px;}
+  h3.tog .hint{color:var(--muted2); font-size:16px; font-family:'Sarabun',sans-serif; white-space:nowrap;}
+  .card.dark h3.tog .hint{color:#B9C4D6;}
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field span{font-size:17.5px; color:var(--muted); font-weight:600;}
+  .card.dark .field span{color:#B9C4D6;}
+  .card.dark select,.card.dark input{background:#0E2F5299; color:#fff; border-color:#ffffff33;}
+  .field input,.field select,.field textarea{width:100%;}
+  .form-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;}
+  .form-grid.c3{grid-template-columns:repeat(3,minmax(0,1fr));} .form-grid.c4{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .form-grid.c5{grid-template-columns:repeat(5,minmax(0,1fr));}
+  .step-lbl{font:700 17px 'Sarabun',sans-serif; color:var(--navy); margin:14px 0 6px; padding-top:10px; border-top:1px dashed var(--line2);}
+  .step-lbl:first-of-type{border-top:0; padding-top:0; margin-top:4px;}
+  .result-box{margin-top:14px; padding:12px 14px; border-radius:10px; background:var(--okbg); border:1.5px solid var(--good); color:var(--ink); font-size:19px;}
+  .result-box b{color:var(--good); font-size:24px;}
+  .result-box.warn{background:var(--alert); border-color:var(--bad); color:var(--bad);}
+  .sl{margin-bottom:14px;}
+  .sl-h{display:flex; justify-content:space-between; align-items:baseline; font-size:17.5px; font-weight:600; color:var(--muted); margin-bottom:4px;}
+  .sl-h b{font:700 21px 'Space Grotesk','Sarabun',sans-serif; color:var(--navy-deep);}
+  input[type=range]{width:100%; accent-color:#4FAE74; height:28px;}
+  .sl-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 14px;}
+  .seg{display:grid; grid-template-columns:repeat(4,1fr); gap:6px;}
+  .seg button{border:1.5px solid var(--line2); background:var(--field); color:var(--ink); border-radius:8px; padding:8px 4px; font:600 16px 'Sarabun',sans-serif; cursor:pointer;}
+  .seg button.on{background:#0F56B2; border-color:#0F56B2; color:#fff;}
+  .lab-big{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;}
+  .lab-big > div{background:var(--soft); border-radius:10px; padding:12px;}
+  .lab-big .lb{font-size:15px; color:var(--muted2);} .lab-big .lv{font:800 27px 'Space Grotesk',sans-serif; color:var(--navy-deep);} .lab-big .ld{font-size:14.5px; color:var(--muted2);}
+  .full{grid-column:1/-1;}
+  .btn-primary{display:inline-flex; align-items:center; gap:6px; background:linear-gradient(135deg,#4FAE74,#9CE3B8); color:#082238; border:none; border-radius:9px; padding:10px 18px; font-size:20px; font-weight:700; cursor:pointer; font-family:'Sarabun',sans-serif;}
+  .btn-ghost{background:transparent; border:1.5px solid var(--line2); color:var(--navy-deep); border-radius:8px; padding:7px 12px; font-size:17.5px; font-weight:600; cursor:pointer; font-family:'Sarabun',sans-serif;}
+  .btn-ghost.bad{color:var(--bad); border-color:var(--bad);}
+  .btns{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;}
+  .scroll{overflow-x:auto;}
+  table{width:100%; border-collapse:collapse; font-size:19px;}
+  thead tr{text-align:left; color:var(--muted); border-bottom:2px solid var(--line);}
+  th{padding:8px 10px; font-weight:600; font-size:17px; white-space:nowrap;}
+  td{padding:9px 10px; border-bottom:1px solid var(--line); white-space:nowrap;}
+  .num{text-align:right; font-weight:600; color:var(--navy-deep); font-variant-numeric:tabular-nums;}
+  th.r{text-align:right;}
+  tr.sum td{border-top:2px solid var(--line2); font-weight:700; color:var(--navy);}
+  tr.yr{cursor:pointer;} tr.yr:hover td{background:var(--t1);}
+  tr.yr td:first-child{font-weight:700; color:var(--navy-deep);}
+  tr.yr.open td{background:var(--t2);}
+  tr.mrow td{font-size:16.5px; padding:5px 10px; background:var(--soft);}
+  tr.mrow td:first-child{padding-left:26px; color:var(--muted2);}
+  .mini-row{display:flex; justify-content:space-between; align-items:center; padding:3px 0; font-size:17.5px; color:var(--muted); gap:8px;}
+  .mini-row .v{font-size:18.5px; font-weight:700; color:var(--ink); text-align:right;}
+  .mini-row .v.ok{color:var(--good);}
+  .tech-row{display:flex; justify-content:space-between; align-items:baseline; padding:4px 0; gap:10px;}
+  .tech-row .lab{font-size:18px; color:var(--ink);}
+  .card.dark .tech-row .lab{color:#B9C4D6;}
+  .tech-row .val{font-family:'Space Grotesk',sans-serif; font-size:20px; font-weight:700; color:var(--navy-deep); white-space:nowrap;}
+  .card.dark .tech-row .val{color:#fff;}
+  .tech-row .val.good{color:var(--good);} .card.dark .tech-row .val.good{color:#7EE8A8;}
+  .cond{font-size:14.5px; color:var(--muted2); margin:-2px 0 10px;}
+  .income-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:14px;}
+  .income-chip{background:#FFFFFF14; border:1px solid #FFFFFF26; border-radius:10px; padding:10px 12px;}
+  .income-chip .lbl{font-size:16px; color:#B9C4D6; margin-bottom:3px;}
+  .income-chip .val{font-family:'Space Grotesk',sans-serif; font-size:23px; font-weight:700; color:#fff;}
+  .income-chip .when{font-size:13.5px; color:#9CE3B8; margin-top:2px;}
+  .total-line{border-top:1px solid #ffffff33; padding-top:12px; display:flex; justify-content:space-between; align-items:baseline; gap:10px;}
+  .total-line .l{font-size:19px; color:#B9C4D6; font-weight:600;}
+  .total-line .v{font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:800; color:#4FAE74;}
+  .overview{background:#0E2F5299; border:1px solid #ffffff22; border-radius:10px; padding:12px 14px; margin-bottom:16px;}
+  .overview .t{font-weight:700; color:#fff; margin-bottom:6px;}
+  .overview .l{font-size:15px; color:#B9C4D6; margin-bottom:5px;}
+  .overview .l.ok{color:#9CE3B8;} .overview .l.no{color:#F5C6C0;}
+  .qgrid{display:grid; grid-template-columns:repeat(2,minmax(150px,1fr)); gap:12px; margin-bottom:16px;}
+  .qcard{border-radius:12px; padding:14px; border-left:5px solid var(--line2);}
+  .qcard.ok{border-left-color:var(--good);} .qcard.no{border-left-color:var(--bad);}
+  .qcard .head{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-weight:700; color:var(--navy-deep); font-size:19px;}
+  .alert-box{margin-top:8px; background:var(--alert); border:1px solid #B4453B33; border-radius:8px; padding:8px 10px;}
+  .alert-box .title{font-size:16px; font-weight:700; color:var(--bad); margin-bottom:3px;}
+  .alert-box .line{font-size:16.5px; color:var(--bad);}
+  .alert-box.tip{background:var(--tip); border-color:var(--gold);} .alert-box.tip .title,.alert-box.tip .line{color:var(--navy);}
+  .alert-box.okb{background:var(--okbg); border-color:var(--good);} .alert-box.okb .line{color:var(--good); font-weight:700;}
+  .s-ok{color:var(--good); font-weight:700;} .s-no{color:var(--bad); font-weight:700;}
+  .qtable{width:100%; border-collapse:collapse; font-size:16.5px;}
+  .qtable th{text-align:left; padding:3px 4px; color:var(--muted); font-weight:600; border-bottom:1px solid var(--line2); font-size:15.5px;}
+  .qtable th.r{text-align:right;}
+  .qtable td{padding:5px 4px; border:none;}
+  .qtable td.r{text-align:right; font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:700; color:var(--navy-deep);}
+  .bonus-box{margin-top:10px; padding-top:10px; border-top:1.5px solid #4FAE7444;}
+  .bonus-box .title{font-size:16.5px; font-weight:700; color:var(--navy-deep); margin-bottom:4px;}
+  .bonus-box .reward{display:flex; justify-content:space-between; align-items:baseline;}
+  .bonus-box .reward .amt{font-size:23px; font-weight:800;}
+  .jbgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin:12px 0 16px;}
+  .jbcard{border-radius:12px; padding:12px; border:1.5px solid #4FAE7433; border-left-width:5px;}
+  .jbcard .head{display:flex; justify-content:space-between; font-weight:700; font-size:18.5px; color:var(--navy-deep); margin-bottom:6px;}
+  .annual-box{border-radius:12px; padding:16px; border:1.5px solid #4FAE74; background:var(--tip);}
+  .trophy{border-radius:12px; padding:16px; border:1.5px solid var(--line2); background:var(--cream);}
+  .trophy.on{background:linear-gradient(135deg,#082238,#0F56B2); border-color:#4FAE74; color:#fff;}
+  .trophy .big{font-size:30px; font-weight:800; color:var(--navy-deep);} .trophy.on .big{color:#9CE3B8;}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .preview{background:var(--soft); border:1px dashed var(--line2); border-radius:8px; padding:10px 12px; font-size:16px; color:var(--muted); margin-top:10px;}
+  .chk{display:flex; align-items:center; gap:8px; font-size:17.5px; font-weight:600; color:var(--muted);}
+  .chk input{width:20px; height:20px;}
+  .card.dark .chk{color:#B9C4D6;}
+  .saved{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--line);}
+  .saved b{color:var(--navy-deep); font-size:19px;}
+  .hero-vs{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0;}
+  .hero-vs .old{font:700 26px 'Space Grotesk',sans-serif; color:#B9C4D6;}
+  .hero-vs .new{font:800 32px 'Space Grotesk',sans-serif; color:#9CE3B8;}
+  .legend{display:flex; gap:14px; font-size:15px; color:var(--muted2); flex-wrap:wrap; margin-top:4px;}
+  svg text{font-family:'Sarabun',sans-serif; fill:var(--muted2);}
+  .steps{margin:0; padding-left:1.4em; font-size:19px;} .steps li{padding:3px 0;}
+  .foot-note{font-size:15.5px; color:var(--muted2); margin-top:10px;}
+  footer.bottom{text-align:center; padding:18px 20px 34px; color:var(--muted2); font-size:15px;}
+  #toast{position:fixed; bottom:calc(20px + env(safe-area-inset-bottom,0px)); left:50%; transform:translateX(-50%); background:#082238; color:#fff; padding:10px 18px; border-radius:8px; font-size:19px; display:none; z-index:100; max-width:90vw;}
+  @media (max-width:640px){
+    .form-grid,.form-grid.c3,.form-grid.c4{grid-template-columns:repeat(2,minmax(0,1fr));}
+    header.top .inner{padding-top:56px;}
+    .form-grid.c5{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .lab-big{grid-template-columns:1fr;}
+    .qgrid,.two{grid-template-columns:1fr;}
+    header.top h1{font-size:44px;} header.top .th-name{font-size:18px;} header.top p{font-size:16px;} .brand{gap:14px;} .brand .logo{width:104px;height:104px;border-radius:24px;}
+    main{padding:14px 12px 56px;} .card{padding:16px;}
+    table{font-size:17px;} td,th{padding:7px 6px;}
+  }
+  @media print{ nav.tabs,.hdr-btns,.noprint,#toast{display:none!important;} body{background:#fff;} .card{break-inside:avoid; box-shadow:none;} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="grid-bg"></div><div class="glow"></div>
+  <div class="hdr-btns noprint">
+    <button id="btn-export">📤 บันทึก</button>
+    <button id="btn-import">📥 โหลด</button>
+    <input type="file" id="file-import" accept="application/json" hidden>
+  </div>
+  <div class="inner">
+    <div class="brand">
+      <div class="logo"><img src="data:image/jpeg;base64,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" alt="Recruiting"></div>
+      <div><span class="label">ป้าเป็ด CFP® · Bangkok Life Assurance</span><h1>Recruiting</h1><span class="th-name">ชวนมาเป็นตัวแทน</span></div>
+    </div>
+    <p>ประมาณการรายได้ตัวแทนและ UM 5 ปี จากสมมติฐานการขาย ด้วยเกณฑ์เดียวกับ UM Year Plan</p>
+  </div>
+</header>
+<nav class="tabs"><div class="inner" id="tab-nav"></div></nav>
+<main id="tab-content"></main>
+<footer class="bottom">อ้างอิงอัตราค่าตอบแทนจากประกาศตัวแทน ณ 03-02-2026 · ป้าเป็ด CFP® · ข้อมูลเก็บไว้ในเบราว์เซอร์นี้เท่านั้น</footer>
+<div id="toast"></div>
+<script>
+/* ================= CONSTANTS (เหมือน UM Year Plan) ================= */
+const QUARTERLY_TIERS=[{min:12500,max:49999,pct:4},{min:50000,max:69999,pct:10},{min:70000,max:99999,pct:17},{min:100000,max:199999,pct:22},{min:200000,max:299999,pct:24},{min:300000,max:499999,pct:27},{min:500000,max:749999,pct:30},{min:750000,max:999999,pct:33},{min:1000000,max:Infinity,pct:38}];
+const ANNUAL_TIER_RANGES=[{min:50000,max:69999},{min:70000,max:99999},{min:100000,max:199999},{min:200000,max:299999},{min:300000,max:499999},{min:500000,max:749999},{min:750000,max:999999},{min:1000000,max:Infinity}];
+const ANNUAL_BANDS={low:{pct:[10,17,22,24,27,30,33,38]},mid:{pct:[13,20,25,27,30,33,37,42]},high:{pct:[15,22,27,29,32,35,40,45]}};
+const QUALIFY_MIN_CASES=6,QUALIFY_MIN_FYC=40000,QUALIFY_MIN_ACTIVE_MONTHS=2;
+const ANNUAL_GATE_CASES=24,ANNUAL_GATE_FYC=160000,ANNUAL_BONUS_GATE_CASES=12,ANNUAL_BONUS_GATE_FYC=50000;
+const STREAK_REWARDS={4:32000,3:16000,2:8000,1:0,0:0};
+const JOINING_MONTHLY_MIN_CASES=2,JOINING_MONTHLY_MIN_FYC=6500,JOINING_MONTHLY_BONUS=2200,JOINING_BONUS_CAP=8800;
+const JOINING_CUM_TABLE=[{cases:2,fyc:6500,bonus:2200},{cases:4,fyc:13000,bonus:4400},{cases:6,fyc:19500,bonus:6600},{cases:8,fyc:26000,bonus:8800}];
+const PERSISTENCY_BAND_OPTIONS=[{value:60,label:"ต่ำกว่า 75%"},{value:80,label:"75 – 84%"},{value:87,label:"85 – 89%"},{value:95,label:"90% ขึ้นไป"}];
+const BILLING_MODES=[{value:"annual",label:"รายปี",installments:1,intervalMonths:12},{value:"semiannual",label:"6 เดือน",installments:2,intervalMonths:6},{value:"quarterly",label:"3 เดือน",installments:4,intervalMonths:3},{value:"monthly",label:"รายเดือน",installments:11,intervalMonths:1}];
+const UM_POSITIONS=[
+ {value:"unit2",label:"ผู้จัดการหน่วย 2",cfycMonth:17000,cfycYear:204000,salary:5000,tenurePct:19},
+ {value:"unit1",label:"ผู้จัดการหน่วย 1",cfycMonth:20000,cfycYear:240000,salary:6100,tenurePct:19},
+ {value:"zone2",label:"ผู้จัดการขยายงาน ข.2",cfycMonth:28000,cfycYear:336000,salary:8100,tenurePct:20},
+ {value:"zone1",label:"ผู้จัดการขยายงาน ข.1",cfycMonth:36000,cfycYear:432000,salary:10000,tenurePct:20},
+ {value:"region2",label:"ผู้จัดการภาค ภ.2",cfycMonth:50000,cfycYear:600000,salary:13700,tenurePct:21},
+ {value:"region1",label:"ผู้จัดการภาค ภ.1",cfycMonth:60000,cfycYear:720000,salary:16400,tenurePct:21},
+ {value:"director",label:"ผู้อำนวยการภาค ผอ.ภ.",cfycMonth:85000,cfycYear:1020000,salary:23500,tenurePct:22},
+ {value:"director-s",label:"ผู้อำนวยการภาค ผอ.ภ.ส.",cfycMonth:120000,cfycYear:1440000,salary:34000,tenurePct:22}];
+const NEW_AGENT_PROFIT_TABLE={unit2:{rates:[15,16,17,18,19,20,21,22],amounts:null},unit1:{rates:[15,16,17,18,19,20,21,22],amounts:null},
+ zone2:{rates:[15,16.5,18,19.5,21,23,25,27],amounts:[15300,17700,20100,22500,24900,30300,30300,30300]},
+ zone1:{rates:[15,16.5,18,19.5,21,23,25,27],amounts:[20000,23000,26000,29000,32000,38600,38600,38600]},
+ region2:{rates:[15,17,19,21,23,26,29,32],amounts:[29300,34100,38900,43700,48500,53900,53900,53900]},
+ region1:{rates:[15,17,19,21,23,26,29,32],amounts:[36000,43200,50400,57600,64800,81000,81000,81000]},
+ director:{rates:[15,17.5,20,22.5,25,28,32,36],amounts:[53800,65800,77800,89800,101800,128800,128800,128800]},
+ "director-s":{rates:[15,17.5,20,22.5,25,28,32,36],amounts:[80000,98000,116000,134000,152000,191000,191000,191000]}};
+const NEW_AGENT_PROFIT_BAND_MIN_PCT=[1,21,41,61,81,101,151,201];
+const SALES_COMP_QUARTERLY_THRESHOLD={unit2:40000,unit1:40000,zone2:50000,zone1:50000,region2:60000,region1:60000,director:70000,"director-s":70000};
+const SALES_COMP_RATE_TIERS=[{minMultiplier:2.5,rate:25},{minMultiplier:1.75,rate:22},{minMultiplier:1.0,rate:20}];
+const TEAM_BUILDING_TIERS=[{level:"สตาร์",minFyc:60000,reward:3500},{level:"ระดับ 1",minFyc:36000,reward:2000},{level:"ระดับ 2",minFyc:29000,reward:1500},{level:"ระดับ 3",minFyc:22000,reward:1050},{level:"ระดับ 4",minFyc:15000,reward:700}];
+const THAI_MONTH_SHORT=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+const NAVY_TINTS=["var(--t1)","var(--t2)","var(--t3)","var(--t4)"];
+const GOLD_TINTS=["var(--g1)","var(--g2)","var(--g3)","var(--g4)"];
+const YEARS=5;
+const DEF_STEPS="คุยรายละเอียดและสมัครกับป้าเป็ด CFP®\nอบรมหลักสูตรเตรียมสอบใบอนุญาตตัวแทนประกันชีวิต\nสอบใบอนุญาตตัวแทนประกันชีวิต (คปภ.)\nรับรหัสตัวแทน และอบรมความรู้ผลิตภัณฑ์\nเดือนแรก: ตั้งเป้า 2 ราย เพื่อรับ Joining Bonus";
+
+/* ================= HELPERS ================= */
+const THB=n=>Math.floor((n||0)+1e-6).toLocaleString("th-TH");
+const C1=n=>{n=Math.round((n||0)*10)/10;return Number.isInteger(n)?String(n):n.toFixed(1)};
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clone=o=>JSON.parse(JSON.stringify(o));
+const quarterlyPct=f=>{const t=QUARTERLY_TIERS.find(t=>f>=t.min&&f<=t.max);return t?t.pct:0};
+function annualPct(f,band){const i=ANNUAL_TIER_RANGES.findIndex(t=>f>=t.min&&f<=t.max);return i<0?0:ANNUAL_BANDS[band].pct[i]}
+function newAgentProfitBandIndex(p){let i=0;NEW_AGENT_PROFIT_BAND_MIN_PCT.forEach((v,k)=>{if(p>=v)i=k});return i}
+function salesCompRate(q,th){const m=th>0?q/th:0;const t=SALES_COMP_RATE_TIERS.find(t=>m>=t.minMultiplier);return t?t.rate:0}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",1800)}
+
+/* ================= STATE ================= */
+const STORAGE_KEY="ped-recruit-v3";
+const DEFAULT_DATA={
+  prospect:{name:"",age:"",job:"",mode:"full",income:20000,raise:3,note:""},
+  agent:{target:40000,targetUnit:"month",r1:25,r2:10,r3:5,r4:5,r5:5,billing:"annual",premium:20000,persist:85},
+  um:{position:"unit2",includeOwn:false,inSummary:true,newPerYear:[0,3,3,3,3],retention:80},
+  steps:DEF_STEPS
+};
+const MODE_INST={annual:1,semiannual:2,quarterly:4,monthly:12};
+const MODE_UNIT={annual:"ต่อปี",semiannual:"ต่อ 6 เดือน",quarterly:"ต่อ 3 เดือน",monthly:"ต่อเดือน"};
+const YEAR1_PERSIST=75;
+const COLLECT_BONUS_PCT=10;
+const CAREER_REQ={2:{minCases:10,minFYC:60000,minPersistency:70},3:{minCases:12,minFYC:80000,minPersistency:71},4:{minCases:14,minFYC:100000,minPersistency:73},5:{minCases:16,minFYC:120000,minPersistency:75}};
+const careerReq=t=>t<2?null:t>=5?CAREER_REQ[5]:CAREER_REQ[t];
+const careerPct=t=>t>=11?80:t>=6?70:t>=2?60:0;
+let store={current:clone(DEFAULT_DATA),prospects:[]};
+try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(s&&s.current)store=s}catch(e){}
+let D=store.current; normalize();
+function normalize(){D.prospect=Object.assign(clone(DEFAULT_DATA.prospect),D.prospect||{});D.agent=Object.assign(clone(DEFAULT_DATA.agent),D.agent||{});D.um=Object.assign(clone(DEFAULT_DATA.um),D.um||{});if(!Array.isArray(D.um.newPerYear)||D.um.newPerYear.length<5)D.um.newPerYear=clone(DEFAULT_DATA.um.newPerYear);if(typeof D.steps!=="string")D.steps=DEF_STEPS}
+function save(){store.current=D;try{localStorage.setItem(STORAGE_KEY,JSON.stringify(store))}catch(e){}}
+let activeTab="agent",agentSub="perf",selYear=0,collapsed={explain:true},openYears={},umOpenYears={},sandbox=null;
+
+/* ================= SIMULATION ================= */
+// งวดเก็บเบี้ยปีแรก — สูตรเดียวกับ buildInstallmentSchedule ของ UM Year Plan
+function firstYearSchedule(mode,total){
+  if(mode==="monthly"){const p=total/12;const l=[{o:0,v:2*p}];for(let m=2;m<=11;m++)l.push({o:m,v:p});return l}
+  const b=BILLING_MODES.find(x=>x.value===mode)||BILLING_MODES[0];
+  return Array.from({length:b.installments},(_,i)=>({o:i*b.intervalMonths,v:total/b.installments}));
+}
+function renewalSchedule(mode,total){
+  if(mode==="monthly")return Array.from({length:12},(_,i)=>({o:i,v:total/12}));
+  return firstYearSchedule(mode,total);
+}
+// ผลงานตัวแทน 1 คน 60 เดือน — ขายเท่ากันทุกเดือนตลอด 5 ปี
+function simAgent(a){
+  const M=Array.from({length:YEARS*12},()=>({cases:0,fyc:0,ren:0}));
+  const annualPrem=a.premium*(MODE_INST[a.billing]||1),fyc1=annualPrem*a.r1/100,rr=[0,a.r2,a.r3,a.r4,a.r5],keep=a.persist/100,c=a.cases;
+  if(!(c>0))return M;
+  for(let m=0;m<YEARS*12;m++){
+    M[m].cases+=c;
+    firstYearSchedule(a.billing,fyc1*c).forEach(({o,v})=>{if(m+o<M.length)M[m+o].fyc+=v});
+    for(let k=1;k<5;k++){const tot=annualPrem*c*rr[k]/100*keep;if(!tot)continue;
+      renewalSchedule(a.billing,tot).forEach(({o,v})=>{const t=m+12*k+o;if(t<M.length)M[t].ren+=v})}
+  }
+  return M;
+}
+// หาจำนวนราย/เดือน (จำนวนเต็ม) ที่น้อยที่สุดที่ทำให้รายได้ปีที่ 1 ถึงเป้า
+function solveCases(a){
+  const tgt=(+a.target||0)*(a.targetUnit==="year"?1:12);
+  if(!(tgt>0))return {cases:1,reached:true};
+  for(let c=1;c<=200;c++){const x=Object.assign({},a,{cases:c});if(agentYear(simAgent(x),0,x).total>=tgt)return {cases:c,reached:true}}
+  return {cases:200,reached:false};
+}
+function effAgent(a){if(a.fixedCases)return Object.assign({},a,{reached:true});const s=solveCases(a);return Object.assign({},a,{cases:s.cases,reached:s.reached})}
+// ผลประโยชน์ตัวแทน 1 ปี — เกณฑ์เดียวกับ UM Year Plan + ค่าเก็บเบี้ยรายปี + CAREER (Agent Income Planner)
+function agentYear(M,y,a){
+  const persist=y===0?YEAR1_PERSIST:a.persist;
+  const ms=M.slice(y*12,y*12+12);
+  const qs=[0,1,2,3].map(q=>{const mm=ms.slice(q*3,q*3+3);
+    const count=mm.reduce((s,m)=>s+m.cases,0),fyc=mm.reduce((s,m)=>s+m.fyc,0),activeMonths=mm.filter(m=>m.cases>0).length;
+    const qualifies=count>=QUALIFY_MIN_CASES&&fyc>=QUALIFY_MIN_FYC&&activeMonths>=QUALIFY_MIN_ACTIVE_MONTHS;
+    const bQualifies=count>=3&&fyc>=12500&&persist>=75,bPct=quarterlyPct(fyc);
+    return {q:q+1,count,fyc,activeMonths,qualifies,bQualifies,bPct,bReward:bQualifies?fyc*bPct/100:0}});
+  let streak=0,run=0;qs.forEach(r=>{run=r.qualifies?run+1:0;streak=Math.max(streak,run)});
+  const cases=ms.reduce((s,m)=>s+m.cases,0),fyc=ms.reduce((s,m)=>s+m.fyc,0),ren=ms.reduce((s,m)=>s+m.ren,0);
+  const totalQuarterlyBonus=qs.reduce((s,r)=>s+r.bReward,0);
+  const annualGate=cases>=ANNUAL_GATE_CASES&&fyc>=ANNUAL_GATE_FYC;
+  const achievedLevel=annualGate?Math.min(streak,4):0, reward=STREAK_REWARDS[achievedLevel]||0;
+  const band=persist>=90?"high":persist>=85?"mid":"low";
+  const annualBonusGate=persist>=75&&cases>=ANNUAL_BONUS_GATE_CASES&&fyc>=ANNUAL_BONUS_GATE_FYC;
+  const annualBonusPct=annualBonusGate?annualPct(fyc,band):0;
+  const annualBonusNet=Math.max(0,fyc*annualBonusPct/100-totalQuarterlyBonus);
+  const collect=a.billing==="annual"?fyc*COLLECT_BONUS_PCT/100:0;
+  const tenure=y+1,req=careerReq(tenure),activeMonths=ms.filter(m=>m.cases>0).length;
+  const career={tenure,req,ryc:ren,casesOk:!!req&&cases>=req.minCases,fycOk:!!req&&fyc>=req.minFYC,persistOk:!!req&&persist>=req.minPersistency,activityOk:activeMonths>=9};
+  career.qualifies=!!req&&career.casesOk&&career.fycOk&&career.persistOk&&career.activityOk;
+  career.pct=career.qualifies?careerPct(tenure):0;career.benefit=ren*career.pct/100;
+  let joining=null;
+  if(y===0){
+    const jm=ms.slice(0,4).map(m=>({count:m.cases,fyc:m.fyc,qualifies:m.cases>=JOINING_MONTHLY_MIN_CASES&&m.fyc>=JOINING_MONTHLY_MIN_FYC}));
+    jm.forEach(m=>m.paid=m.qualifies?JOINING_MONTHLY_BONUS:0);
+    const paid=jm.reduce((s,m)=>s+m.paid,0),cumCases=jm.reduce((s,m)=>s+m.count,0),cumFyc=jm.reduce((s,m)=>s+m.fyc,0);
+    let tier=null;for(const t of JOINING_CUM_TABLE)if(cumCases>=t.cases&&cumFyc>=t.fyc)tier=t;
+    const topUp=Math.max(0,Math.min(JOINING_BONUS_CAP,tier?tier.bonus:0)-paid);
+    joining={months:jm,paid,cumCases,cumFyc,topUp,total:Math.min(JOINING_BONUS_CAP,paid+topUp)};
+  }
+  const joiningTotal=joining?joining.total:0;
+  const items={fyc,ren,collect,qb:totalQuarterlyBonus,ab:annualBonusNet,reward,joining:joiningTotal,career:career.benefit};
+  return {ms,qs,streak,cases,fyc,ren,persist,totalQuarterlyBonus,annualGate,achievedLevel,reward,band,annualBonusGate,annualBonusPct,annualBonusNet,collect,career,joining,items,
+    total:Object.values(items).reduce((s,v)=>s+v,0)};
+}
+// สูตร UM เดียวกับ computeUmItemsForPosition (เต็มปี 12 เดือน)
+function computeUmItemsForPosition(pos,monthlyTeamCFYC,monthsElapsed,monthlyDirectAgentFYC){
+  let cumCFYC=0;for(let m=0;m<monthsElapsed;m++)cumCFYC+=monthlyTeamCFYC[m];
+  const quotaMonths=Math.min(monthsElapsed,Math.floor(cumCFYC/pos.cfycMonth));
+  const item1=quotaMonths*pos.salary;
+  let item2=0;for(let m=0;m<monthsElapsed;m++)item2+=monthlyTeamCFYC[m]*pos.tenurePct/100;
+  const quota3=pos.cfycYear,annualCFYC=monthlyTeamCFYC.reduce((a,b)=>a+b,0);
+  const excessAmount=Math.max(0,annualCFYC-quota3),excessPct=quota3>0?excessAmount/quota3*100:0;
+  const t=NEW_AGENT_PROFIT_TABLE[pos.value],bandIdx=excessAmount>0?newAgentProfitBandIndex(excessPct):-1;
+  const rate3=bandIdx>=0?t.rates[bandIdx]:0,flat3=(bandIdx>=0&&t.amounts)?t.amounts[bandIdx]:0;
+  const previewItem3=bandIdx>=0?excessAmount*rate3/100+flat3:0;
+  let interimItem3=0,interimRate=0;
+  if(monthsElapsed>=6){const c6=monthlyTeamCFYC.slice(0,6).reduce((a,b)=>a+b,0),ex6=Math.max(0,c6-quota3);
+    if(ex6>0){const b6=newAgentProfitBandIndex(ex6/quota3*100);interimRate=t.rates[b6];interimItem3=ex6*t.rates[b6]/100+(t.amounts?t.amounts[b6]:0)}}
+  const item3=monthsElapsed>=6?Math.max(0,previewItem3-interimItem3):0;
+  const threshold6=SALES_COMP_QUARTERLY_THRESHOLD[pos.value],directArr=monthlyDirectAgentFYC||monthlyTeamCFYC;
+  let item6=0;const item6Detail=[];
+  for(let q=1;q<=4;q++){const qf=[0,1,2].reduce((s,i)=>s+directArr[(q-1)*3+i],0),r=salesCompRate(qf,threshold6);item6+=qf*r/100;item6Detail.push({q,qf,rate:r,reward:qf*r/100})}
+  let nextBand=null;
+  if(bandIdx<NEW_AGENT_PROFIT_BAND_MIN_PCT.length-1){const ni=bandIdx+1,needPct=NEW_AGENT_PROFIT_BAND_MIN_PCT[ni];const needCfyc=quota3*(1+needPct/100);nextBand={shortfall:Math.max(0,needCfyc-annualCFYC),rate:t.rates[ni]}}
+  return {item1,item2,item3,item6,item6Detail,cumCFYC,annualCFYC,quotaMonths,quota3,threshold6,rate3,flat3,excessAmount,excessPct,previewItem3,interimItem3,interimRate,nextBand};
+}
+function umYear(M,y,A){
+  const pos=UM_POSITIONS.find(p=>p.value===D.um.position)||UM_POSITIONS[0];
+  const ret=D.um.retention/100, cohorts=[];
+  for(let k=0;k<=y;k++){const n=Math.round((+D.um.newPerYear[k]||0)*Math.pow(ret,y-k));if(n>0)cohorts.push({k,age:y-k,n})}
+  const newCount=+D.um.newPerYear[y]||0, oldCount=cohorts.filter(c=>c.age>0).reduce((s,c)=>s+c.n,0);
+  const teamM=Array.from({length:12},(_,m)=>cohorts.reduce((s,c)=>s+c.n*M[c.age*12+m].fyc,0));
+  const teamCases=Array.from({length:12},(_,m)=>cohorts.reduce((s,c)=>s+c.n*M[c.age*12+m].cases,0));
+  const ownM=Array.from({length:12},(_,m)=>M[y*12+m].fyc);
+  const cfyc=teamM.map((v,m)=>v+(D.um.includeOwn?ownM[m]:0));
+  const r=computeUmItemsForPosition(pos,cfyc,12,cfyc);
+  // ข้อ 4: 30% ของ FYC ตัวแทนใหม่ใน 12 เดือนแรก (ทำงานเต็มปี = ปีแรกของตัวแทน)
+  const newAgentFyc=M.slice(0,12).reduce((s,m)=>s+m.fyc,0);
+  const item4=newCount*newAgentFyc*0.3;
+  // ข้อ 7: ต่อคน ต่อไตรมาส รายใหม่ ≥ 2 แล้วจ่ายตามระดับ FYC/ไตรมาส
+  const item7Detail=[];let item7=0;
+  cohorts.forEach(c=>{for(let q=0;q<4;q++){const mm=M.slice(c.age*12+q*3,c.age*12+q*3+3);const cs=mm.reduce((s,m)=>s+m.cases,0),f=mm.reduce((s,m)=>s+m.fyc,0);
+    const tier=cs>=2?TEAM_BUILDING_TIERS.find(t=>f>=t.minFyc):null;const rw=tier?tier.reward*c.n:0;item7+=rw;
+    item7Detail.push({group:c.age===0?"ตัวแทนใหม่":`ตัวแทนปีที่ ${c.age+1}`,n:c.n,q:q+1,fyc:f,level:tier?tier.level:"—",reward:rw})}});
+  const agentY0=agentYear(M,0,A);
+  const teamJoining=newCount*(agentY0.joining?agentY0.joining.total:0);
+  const item3Total=r.item3+r.interimItem3;
+  return {pos,cohorts,newCount,oldCount,teamCount:newCount+oldCount,teamM,teamCases,cfyc,r,item1:r.item1,item2:r.item2,item3:item3Total,item4,item6:r.item6,item7,item7Detail,newAgentFyc,teamJoining,
+    total:r.item1+r.item2+item3Total+item4+r.item6+item7};
+}
+function allYears(src){
+  const A=effAgent(src||D.agent);
+  const M=simAgent(A);
+  const ag=Array.from({length:YEARS},(_,y)=>agentYear(M,y,A));
+  const um=Array.from({length:YEARS},(_,y)=>umYear(M,y,A));
+  return {A,M,ag,um};
+}
+
+/* ================= RENDER ================= */
+const fmtNum=v=>{if(v===""||v===null||v===undefined)return"";const s=String(v);const neg=s.startsWith("-");const [i,d]=s.replace(/[^\d.]/g,"").split(".");const ii=(i||"0").replace(/^0+(?=\d)/,"").replace(/\B(?=(\d{3})+(?!\d))/g,",");return (neg?"-":"")+ii+(d!==undefined?"."+d:"")};
+const field=(label,input,cls="")=>`<label class="field ${cls}"><span>${label}</span>${input}</label>`;
+const bindId=b=>"in-"+b.replace(/[.\[\]]/g,"-");
+const numIn=(b,val,style="")=>`<input type="text" inputmode="decimal" class="nf" data-bind="${b}" id="${bindId(b)}" value="${fmtNum(val)}" autocomplete="off" ${style?`style="${style}"`:""}>`;
+const togHead=(key,title)=>`<h3 class="tog" data-toggle-box="${key}"><span>${title}</span><span class="hint">${collapsed[key]?'▶ แตะเพื่อดู':'▼ ย่อ'}</span></h3>`;
+function yearPicker(){return `<div class="year-picker"><span>ปีที่ดู:</span><select id="year-select">${Array.from({length:YEARS},(_,y)=>`<option value="${y}" ${y===selYear?"selected":""}>ปีที่ ${y+1}</option>`).join("")}</select></div>`}
+function renderTabNav(){
+  const tabs=[["prospect","🙋 ผู้สนใจ"],["agent","👤 ตัวแทน"],["um","🧑‍🤝‍🧑 UM"],["summary","📊 สรุป"]];
+  let h=`<div class="main">${tabs.map(([id,l])=>`<button data-tab="${id}" class="${activeTab===id?"active":""}">${l}</button>`).join("")}</div>`;
+  if(activeTab==="agent")h+=`<div class="sub-tabs">${[["perf","🏆 ผลงาน"],["lab","🎛️ ลองปรับ"]].map(([id,l])=>`<button data-sub="${id}" class="${agentSub===id?"active":""}">${l}</button>`).join("")}</div>`;
+  document.getElementById("tab-nav").innerHTML=h;
+}
+
+/* ---------- แท็บ ตัวแทน ---------- */
+const BENEFITS=[
+  ["fyc","ค่าคอมมิชชั่นปีแรก",a=>`เบี้ยปีแรก × ${a.r1}% จ่ายตามงวดที่เก็บเบี้ย`],
+  ["ren","ค่าคอมมิชชั่นปีต่อ",a=>`เบี้ยปีที่ 2–5 × ${a.r2}/${a.r3}/${a.r4}/${a.r5}% × อัตราคงอยู่ ${a.persist}%`],
+  ["collect","ค่าเก็บเบี้ยรายปี",a=>a.billing==="annual"?`${COLLECT_BONUS_PCT}% ของคอมปีแรก เฉพาะกรมธรรม์เก็บเบี้ยรายปี`:`ได้เฉพาะกรมธรรม์เก็บเบี้ยรายปี (ตอนนี้เลือก${BILLING_MODES.find(b=>b.value===a.billing).label})`],
+  ["qb","โบนัสไตรมาส",()=>`≥ 3 ราย + FYC ≥ 12,500/ไตรมาส · อัตรา 4–38% ของ FYC ไตรมาส`],
+  ["ab","โบนัสปี (สุทธิ)",()=>`≥ 12 ราย + FYC ≥ 50,000/ปี · อัตราตามอัตราคงอยู่ · หักโบนัสไตรมาสที่จ่ายแล้ว`],
+  ["reward","เงินรางวัลคุณวุฒิไตรมาส",()=>`ผ่านคุณวุฒิติดต่อกัน 2/3/4 ไตรมาส + ทั้งปี 24 ราย/160,000 = 8,000/16,000/32,000`],
+  ["joining","Joining Bonus",()=>`4 เดือนแรก เดือนละ 2 ราย + FYC 6,500 = 2,200 · สูงสุด 8,800`],
+  ["career","ผลประโยชน์ชั้นอาชีพ (CAREER)",()=>`คอมปีต่อ × 60% (อายุงาน 2–5 ปี) เมื่อผ่านเกณฑ์ราย/FYC/อัตราคงอยู่ตามอายุงาน`],
+];
+function renderAgentTab(Y){
+  if(agentSub==="lab")return renderLab(Y);
+  const a=D.agent,A=Y.A,inst=MODE_INST[a.billing],annualPrem=a.premium*inst,fyc1=annualPrem*a.r1/100;
+  const sched=firstYearSchedule(a.billing,fyc1);
+  const schedTxt=a.billing==="monthly"?`งวดแรกเก็บล่วงหน้า 2 เดือน (คอม ${THB(sched[0].v)}) · เดือนที่ 2 เว้น · เดือนที่ 3–12 เดือนละ ${THB(sched[1].v)}`:`${inst} งวด คอมงวดละ ${THB(sched[0].v)} ทุก ${12/inst} เดือน`;
+  const R=Y.ag[selYear];
+  return `
+  <div class="card">
+    ${togHead("assume","📝 สมมติฐานผลงาน")}
+    ${collapsed.assume?'':`
+    <p class="sub">ใช้แทนการบันทึกผลงานรายกรมธรรม์ · ขายเท่ากันทุกเดือนต่อเนื่อง 5 ปี</p>
+    <div class="step-lbl">1. รายได้ที่ต้องการ</div>
+    <div class="form-grid">${field("จำนวนเงิน (บาท)",numIn("agent.target",a.target))}
+      ${field("ต่อ",`<select data-bind="agent.targetUnit"><option value="month" ${a.targetUnit==="month"?"selected":""}>ต่อเดือน</option><option value="year" ${a.targetUnit==="year"?"selected":""}>ต่อปี</option></select>`)}</div>
+    <div class="step-lbl">2. ค่าคอมมิชชั่น (%)</div>
+    <div class="form-grid c5">${[1,2,3,4,5].map(k=>field(`ปีที่ ${k}`,numIn("agent.r"+k,a["r"+k]))).join("")}</div>
+    <div class="step-lbl">3–5. การเก็บเบี้ยและอัตราคงอยู่</div>
+    <div class="form-grid c3">
+      ${field("ลักษณะการเก็บเบี้ย",`<select data-bind="agent.billing">${BILLING_MODES.map(b=>`<option value="${b.value}" ${a.billing===b.value?"selected":""}>${b.label}</option>`).join("")}</select>`)}
+      ${field(`เบี้ยประกันต่อราย (${MODE_UNIT[a.billing]})`,numIn("agent.premium",a.premium))}
+      ${field("อัตราคงอยู่ ปีที่ 2 ขึ้นไป (%)",numIn("agent.persist",a.persist))}
+    </div>
+    <div class="result-box ${A.reached?'':'warn'}">
+      ${A.reached?`ต้องขายเดือนละ <b>${A.cases} ราย</b> (ปีละ ${A.cases*12} ราย) จึงได้รายได้ปีที่ 1 ถึง ${THB(a.target)} ${a.targetUnit==="year"?"ต่อปี":"ต่อเดือน"}`:`ขายเดือนละ 200 รายยังไม่ถึงเป้า — ลองปรับเบี้ยหรือ % คอม`}
+    </div>
+    <div class="preview">เบี้ยต่อปีต่อราย ${THB(annualPrem)} · FYC ต่อราย ${THB(fyc1)} — ${schedTxt}<br>ปีที่ 1 ใช้อัตราคงอยู่ 75% ตามระเบียบ (เฉพาะคำนวณโบนัส) · ปีที่ 2 ขึ้นไปใช้ ${a.persist}% ทั้งลดคอมปีต่อ คำนวณโบนัส และ CAREER</div>`}
+  </div>
+  ${benefitsCard(Y)}
+  ${yearPicker()}
+  ${agentIncomeCard(R)}
+  ${fiveYearCard(Y)}
+  ${quarterCard(R)}
+  ${selYear===0?joiningCard(R):''}
+  ${careerCard(Y)}
+  <div class="foot-note">* ประมาณการจากสมมติฐานเท่านั้น รางวัลจริงเป็นไปตามการตรวจสอบและอนุมัติของบริษัท และเป็นรายได้ที่ต้องเสียภาษีตามกฎหมาย</div>`;
+}
+function benefitsCard(Y){
+  const tot=k=>Y.ag.reduce((s,R)=>s+R.items[k],0);
+  return `<div class="card">
+    ${togHead("benefits","📋 ผลประโยชน์ตัวแทนทั้งหมด")}
+    ${collapsed.benefits?'':`<p class="sub">ทุกรายการที่คำนวณเป็นตัวเงินได้ แยกรายปี (บาท)</p>
+    <div class="scroll"><table>
+      <thead><tr><th>ผลประโยชน์</th>${Y.ag.map((_,y)=>`<th class="r">ปี ${y+1}</th>`).join("")}<th class="r">รวม 5 ปี</th></tr></thead>
+      <tbody>${BENEFITS.map(([k,l,c])=>`<tr><td style="white-space:normal;min-width:190px"><b style="color:var(--navy-deep)">${l}</b><div style="font-size:14px;color:var(--muted2);line-height:1.35">${c(Y.A)}</div></td>
+        ${Y.ag.map(R=>`<td class="num" style="color:${R.items[k]?'var(--navy-deep)':'var(--muted2)'}">${THB(R.items[k])}</td>`).join("")}<td class="num" style="color:var(--good)">${THB(tot(k))}</td></tr>`).join("")}
+        <tr class="sum"><td>รวมทั้งหมด</td>${Y.ag.map(R=>`<td class="num">${THB(R.total)}</td>`).join("")}<td class="num">${THB(Y.ag.reduce((s,R)=>s+R.total,0))}</td></tr>
+        <tr><td style="color:var(--muted2)">เฉลี่ยต่อเดือน</td>${Y.ag.map(R=>`<td class="num" style="color:var(--muted2)">${THB(R.total/12)}</td>`).join("")}<td></td></tr>
+      </tbody></table></div>`}
+  </div>`;
+}
+function agentIncomeCard(R){
+  const qOver=R.qs.filter(r=>!r.qualifies).map(r=>`<div class="l no">⚠ ไตรมาส ${r.q} — คุณวุฒิไตรมาส: ${[r.count<QUALIFY_MIN_CASES?`ขาดอีก ${C1(QUALIFY_MIN_CASES-r.count)} ราย`:'',r.fyc<QUALIFY_MIN_FYC?`FYC ขาดอีก ${THB(QUALIFY_MIN_FYC-r.fyc)}`:'',r.activeMonths<2?`มีผลงานอีก ${2-r.activeMonths} เดือน`:''].filter(Boolean).join(' · ')}</div>`).join("");
+  const nextA=ANNUAL_TIER_RANGES.find(t=>t.min>R.fyc),C=R.career;
+  const chip=(l,v,w)=>`<div class="income-chip"><div class="lbl">${l}</div><div class="val">${THB(v)}</div><div class="when">${w}</div></div>`;
+  return `<div class="card dark"><div class="grid-bg"></div>
+    <h3>รายได้รวม ปีที่ ${selYear+1}</h3>
+    <p class="sub">${C1(R.cases)} ราย · อัตราคงอยู่ที่ใช้ ${R.persist}%${selYear===0?' (ตามระเบียบปีแรก)':''}</p>
+    <div class="overview"><div class="t">📊 ภาพรวมสถานการณ์</div>
+      ${qOver||`<div class="l ok">คุณวุฒิไตรมาสผ่านครบทุกไตรมาส</div>`}
+      ${!R.annualBonusGate?`<div class="l no">⚠ โบนัสปี: ${[R.cases<12?`ขาดอีก ${C1(12-R.cases)} ราย`:'',R.fyc<50000?`FYC ขาดอีก ${THB(50000-R.fyc)}`:'',R.persist<75?'อัตราคงอยู่ต้อง ≥ 75%':''].filter(Boolean).join(' · ')}</div>`
+        :nextA?`<div class="l">🎯 โบนัสปี ${R.annualBonusPct}% — ขาดอีก FYC ${THB(nextA.min-R.fyc)} จะขยับเป็น ${annualPct(nextA.min,R.band)}%</div>`:`<div class="l ok">🏆 โบนัสปี: อยู่ขั้นสูงสุดแล้ว</div>`}
+      ${C.req?(C.qualifies?`<div class="l ok">✔ CAREER อายุงาน ${C.tenure} ปี: ได้ ${C.pct}% ของคอมปีต่อ</div>`:`<div class="l no">⚠ CAREER: ${[!C.casesOk?`ราย ≥ ${C.req.minCases}`:'',!C.fycOk?`FYC ≥ ${THB(C.req.minFYC)}`:'',!C.persistOk?`อัตราคงอยู่ ≥ ${C.req.minPersistency}%`:'',!C.activityOk?'มีผลงาน 9 ใน 12 เดือน':''].filter(Boolean).join(' · ')}</div>`):`<div class="l">CAREER เริ่มตั้งแต่อายุงานปีที่ 2</div>`}
+    </div>
+    <div class="income-grid">
+      ${chip("ค่าคอมมิชชั่นปีแรก",R.fyc,"ทุกงวดที่เก็บเบี้ย")}
+      ${chip("ค่าคอมมิชชั่นปีต่อ",R.ren,selYear===0?"เริ่มปีที่ 2":"ทุกงวดปีต่อ")}
+      ${D.agent.billing==="annual"?chip("ค่าเก็บเบี้ยรายปี",R.collect,"10% ของคอมปีแรก"):''}
+      ${chip("โบนัสไตรมาส (รวม 4 ไตรมาส)",R.totalQuarterlyBonus,"ทุกไตรมาส")}
+      ${chip("โบนัสปี (สุทธิ)",R.annualBonusNet,"สิ้นปี")}
+      ${chip("เงินรางวัลคุณวุฒิไตรมาส",R.reward,"สิ้นปี")}
+      ${R.joining?chip("Joining Bonus",R.joining.total,"4 เดือนแรก"):''}
+      ${selYear>0?chip("CAREER",C.benefit,C.qualifies?`${C.pct}% ของคอมปีต่อ`:"ยังไม่ผ่านเกณฑ์"):''}
+    </div>
+    <div class="total-line"><span class="l">รวมรายได้ทั้งหมด · เฉลี่ย ${THB(R.total/12)}/เดือน</span><span class="v">${THB(R.total)}</span></div>
+  </div>`;
+}
+function fiveYearCard(Y){
+  const rows=Y.ag.map((R,y)=>{
+    const open=!!openYears[y];
+    const head=`<tr class="yr ${open?'open':''}" data-open-year="${y}"><td>${open?'▼':'▶'} ปีที่ ${y+1}</td><td class="num">${C1(R.cases)}</td><td class="num">${THB(R.fyc)}</td><td class="num">${THB(R.ren)}</td><td class="num">${THB(R.total-R.fyc-R.ren)}</td><td class="num" style="color:var(--good)">${THB(R.total)}</td></tr>`;
+    if(!open)return head;
+    const mrows=R.ms.map((m,i)=>`<tr class="mrow"><td>${THAI_MONTH_SHORT[i]}</td><td class="num">${C1(m.cases)}</td><td class="num">${THB(m.fyc)}</td><td class="num">${THB(m.ren)}</td><td class="num">—</td><td class="num">${THB(m.fyc+m.ren)}</td></tr>`).join("");
+    const qrows=R.qs.map(r=>`<tr class="mrow"><td>โบนัสไตรมาส ${r.q}</td><td></td><td class="num">${THB(r.fyc)}</td><td></td><td class="num" style="color:${r.bQualifies?'var(--good)':'var(--bad)'}">${r.bQualifies?`${r.bPct}% = ${THB(r.bReward)}`:'✕ ไม่ผ่าน'}</td><td></td></tr>`).join("");
+    return head+mrows+qrows;
+  }).join("");
+  const t=Y.ag.reduce((s,R)=>({c:s.c+R.cases,f:s.f+R.fyc,r:s.r+R.ren,b:s.b+R.total-R.fyc-R.ren,tot:s.tot+R.total}),{c:0,f:0,r:0,b:0,tot:0});
+  return `<div class="card">
+    <h3>📅 ผลงาน 5 ปี</h3>
+    <p class="sub">แตะแต่ละปีเพื่อขยายดูรายเดือนและโบนัสไตรมาส</p>
+    <div class="scroll"><table>
+      <thead><tr><th>ปี / เดือน</th><th class="r">ราย</th><th class="r">คอมปีแรก</th><th class="r">คอมปีต่อ</th><th class="r">โบนัส/รางวัล</th><th class="r">รวม</th></tr></thead>
+      <tbody>${rows}<tr class="sum"><td>รวม 5 ปี</td><td class="num">${C1(t.c)}</td><td class="num">${THB(t.f)}</td><td class="num">${THB(t.r)}</td><td class="num">${THB(t.b)}</td><td class="num">${THB(t.tot)}</td></tr></tbody>
+    </table></div></div>`;
+}
+function careerCard(Y){
+  return `<div class="card">
+    ${togHead("career","🎖️ ผลประโยชน์ชั้นอาชีพ (CAREER)")}
+    ${collapsed.career?'':`<p class="sub">คิดจากคอมมิชชั่นปีต่อของปีนั้น × 60% (อายุงาน 2–5 ปี) เมื่อผ่านเกณฑ์ทุกข้อ · ต้องมีผลงานอย่างน้อย 9 ใน 12 เดือน</p>
+    <div class="scroll"><table class="qtable"><thead><tr><th>อายุงาน</th><th class="r">ราย (เกณฑ์)</th><th class="r">FYC (เกณฑ์)</th><th class="r">คงอยู่ (เกณฑ์)</th><th class="r">คอมปีต่อ</th><th class="r">CAREER</th></tr></thead><tbody>
+    ${Y.ag.map(R=>{const C=R.career;if(!C.req)return `<tr><td>ปีที่ ${C.tenure}</td><td colspan="4" style="color:var(--muted2)">ยังไม่เข้าเกณฑ์ (เริ่มปีที่ 2)</td><td class="r">0</td></tr>`;
+      const ok=(b,t)=>`<span class="${b?'s-ok':'s-no'}">${t}</span>`;
+      return `<tr><td>ปีที่ ${C.tenure}</td><td class="r" style="font-size:16px">${ok(C.casesOk,`${C1(R.cases)} (${C.req.minCases})`)}</td><td class="r" style="font-size:16px">${ok(C.fycOk,`${THB(R.fyc)} (${THB(C.req.minFYC)})`)}</td><td class="r" style="font-size:16px">${ok(C.persistOk,`${R.persist}% (${C.req.minPersistency}%)`)}</td><td class="r">${THB(C.ryc)}</td><td class="r" style="color:${C.qualifies?'var(--good)':'var(--muted2)'}">${THB(C.benefit)}</td></tr>`}).join("")}
+    </tbody></table></div>`}
+  </div>`;
+}
+const LAB_RANGES={monthly:[500,30000,100],quarterly:[1500,90000,500],semiannual:[3000,180000,1000],annual:[5000,360000,1000]};
+function labSliders(){
+  const s=sandbox,pr=LAB_RANGES[s.billing];
+  const sl=(k,label,min,max,step,unit="")=>`<div class="sl"><div class="sl-h"><span>${label}</span><b id="lab-v-${k}">${fmtNum(s[k])}${unit}</b></div>
+    <input type="range" min="${min}" max="${max}" step="${step}" value="${s[k]}" data-lab="${k}" aria-label="${label}"></div>`;
+  return `${sl("cases","ขายเดือนละ (ราย)",1,30,1)}
+    <div class="sl"><div class="sl-h"><span>ลักษณะการเก็บเบี้ย</span></div><div class="seg">${BILLING_MODES.map(b=>`<button data-lab-mode="${b.value}" class="${s.billing===b.value?'on':''}">${b.label}</button>`).join("")}</div></div>
+    ${sl("premium",`เบี้ยต่อราย (${MODE_UNIT[s.billing]})`,pr[0],pr[1],pr[2])}
+    ${sl("r1","ค่าคอมปีแรก",0,60,0.5,"%")}
+    <div class="sl-grid">${[2,3,4,5].map(k=>sl("r"+k,`คอมปีที่ ${k}`,0,30,0.5,"%")).join("")}</div>
+    ${sl("persist","อัตราคงอยู่ ปีที่ 2 ขึ้นไป",50,100,1,"%")}`;
+}
+function labOut(){
+  const base=allYears(),nw=allYears(sandbox);
+  const sum=(Y,k)=>Y.ag.reduce((s,R)=>s+(k?R.items[k]:R.total),0);
+  const d=(a,b)=>{const x=b-a;return `<span style="color:${x>0?'var(--good)':x<0?'var(--bad)':'var(--muted2)'}">${x>0?'+':x<0?'−':''}${THB(Math.abs(x))}</span>`};
+  return `<div class="lab-big">
+      <div><div class="lb">เฉลี่ย/เดือน ปีที่ 1</div><div class="lv">${THB(nw.ag[0].total/12)}</div><div class="ld">เดิม ${THB(base.ag[0].total/12)} · ${d(base.ag[0].total/12,nw.ag[0].total/12)}</div></div>
+      <div><div class="lb">รวม 5 ปี</div><div class="lv">${THB(sum(nw))}</div><div class="ld">เดิม ${THB(sum(base))} · ${d(sum(base),sum(nw))}</div></div>
+    </div>
+    <div class="scroll"><table class="qtable"><thead><tr><th>ผลประโยชน์ (รวม 5 ปี)</th><th class="r">เดิม</th><th class="r">ใหม่</th><th class="r">ต่าง</th></tr></thead><tbody>
+      ${BENEFITS.map(([k,l])=>`<tr><td>${l}</td><td class="r" style="font-size:16px;color:var(--muted2)">${THB(sum(base,k))}</td><td class="r" style="font-size:17px">${THB(sum(nw,k))}</td><td class="r" style="font-size:16px">${d(sum(base,k),sum(nw,k))}</td></tr>`).join("")}
+      <tr style="border-top:2px solid var(--line2)"><td style="font-weight:700">รวมทั้งหมด</td><td class="r" style="font-size:16px">${THB(sum(base))}</td><td class="r">${THB(sum(nw))}</td><td class="r" style="font-size:16px">${d(sum(base),sum(nw))}</td></tr>
+    </tbody></table></div>
+    <div class="scroll" style="margin-top:12px"><table class="qtable"><thead><tr><th>รายปี</th>${nw.ag.map((_,y)=>`<th class="r">ปี ${y+1}</th>`).join("")}</tr></thead><tbody>
+      <tr><td>เดิม</td>${base.ag.map(R=>`<td class="r" style="font-size:16px;color:var(--muted2)">${THB(R.total)}</td>`).join("")}</tr>
+      <tr><td>ใหม่</td>${nw.ag.map(R=>`<td class="r" style="font-size:17px">${THB(R.total)}</td>`).join("")}</tr></tbody></table></div>`;
+}
+function renderLab(Y){
+  if(!sandbox)sandbox=Object.assign({},Y.A,{fixedCases:true});
+  return `<div class="card">
+    <h3>🎛️ ลองปรับ</h3>
+    <p class="sub">เลื่อนเพื่อดูว่ารายได้เปลี่ยนเท่าไร — ไม่กระทบสมมติฐานจนกว่าจะกด "ใช้ค่านี้"</p>
+    <div id="lab-sliders">${labSliders()}</div>
+    <div class="btns"><button class="btn-primary" id="lab-apply">✔ ใช้ค่านี้</button><button class="btn-ghost" id="lab-reset">↺ กลับค่าเดิม</button></div>
+  </div>
+  <div class="card"><h3>ผลตอบแทนทั้งหมด</h3><p class="sub">เทียบกับสมมติฐานปัจจุบัน</p><div id="lab-out">${labOut()}</div></div>`;
+}
+function quarterCard(R){
+  const short=(n,have,need,unit)=>n>0?`<span class="s-no">ขาดอีก ${unit==="฿"?THB(n):C1(n)+" "+unit} (มี ${unit==="฿"?THB(have):C1(have)}/${unit==="฿"?THB(need):need})</span>`:`<span class="s-ok">ถึงแล้ว (${unit==="฿"?THB(have):C1(have)})</span>`;
+  const cards=R.qs.map((r,qi)=>{
+    const ms=R.ms.slice(qi*3,qi*3+3);
+    const nextT=QUARTERLY_TIERS.find(t=>t.min>r.fyc);
+    return `<div class="qcard ${r.qualifies?'ok':'no'}" style="background:${NAVY_TINTS[qi]}">
+      <div class="head"><span>ไตรมาส ${r.q} — คุณวุฒิไตรมาส</span><span>${r.qualifies?'✔':'✕'}</span></div>
+      <div class="mini-row"><span>เดือนที่มีผลงาน</span><span class="v ${r.activeMonths>=2?'ok':''}">${r.activeMonths}/3 เดือน</span></div>
+      ${!r.qualifies?`<div class="alert-box"><div class="title">⚠ เกณฑ์คุณวุฒิไตรมาสนี้</div>
+        <div class="line">· จำนวนราย ${short(QUALIFY_MIN_CASES-r.count,r.count,QUALIFY_MIN_CASES,"ราย")}</div>
+        <div class="line">· FYC ${short(QUALIFY_MIN_FYC-r.fyc,r.fyc,QUALIFY_MIN_FYC,"฿")}</div>
+        <div class="line">· เดือนที่มีผลงาน ${short(2-r.activeMonths,r.activeMonths,2,"เดือน")}</div></div>`:''}
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--line2)">
+        <div style="font-size:16px;font-weight:700;color:var(--navy-deep);margin-bottom:4px">ผลงานรายเดือน</div>
+        <table class="qtable"><thead><tr><th>เดือน</th><th class="r">ราย</th><th class="r">FYC ที่ได้</th></tr></thead><tbody>
+          ${ms.map((m,i)=>`<tr><td>${THAI_MONTH_SHORT[qi*3+i]}</td><td class="r">${C1(m.cases)}</td><td class="r">${THB(m.fyc)}</td></tr>`).join("")}
+          <tr style="border-top:1.5px solid var(--line2)"><td style="color:var(--navy-deep);font-weight:700">รวม</td><td class="r">${C1(r.count)}</td><td class="r">${THB(r.fyc)}</td></tr>
+        </tbody></table>
+      </div>
+      <div class="bonus-box"><div class="title">โบนัสไตรมาสนี้ (เงินรางวัลตัวแทน)</div>
+        <div class="reward"><span style="font-size:16px;color:var(--muted)">อัตรา ${r.bPct}%</span><span class="amt" style="color:${r.bQualifies?'var(--good)':'var(--muted2)'}">${THB(r.bReward)}</span></div>
+        ${!r.bQualifies?`<div class="alert-box"><div class="title">⚠ เกณฑ์โบนัสไตรมาส</div>
+          <div class="line">· จำนวนราย ${short(3-r.count,r.count,3,"ราย")}</div>
+          <div class="line">· FYC ${short(12500-r.fyc,r.fyc,12500,"฿")}</div>
+          ${R.persist<75?`<div class="line">· อัตราคงอยู่ต้อง ≥ 75%</div>`:''}</div>`
+          :nextT?`<div style="font-size:15px;color:var(--muted2);margin-top:2px">🎯 ขาดอีก FYC ${THB(nextT.min-r.fyc)} จะขยับเป็น ${nextT.pct}%</div>`:''}
+      </div></div>`}).join("");
+  const has=R.achievedLevel>0;
+  const nextLevel=R.achievedLevel+1;
+  return `<div class="card">
+    <h3>การแข่งขันคุณวุฒิไตรมาส ปีที่ ${selYear+1}</h3>
+    <p class="sub">เกณฑ์ต่อไตรมาส: ผลงาน ≥ 6 ราย · FYC ≥ 40,000 · มีผลงานรายใหม่อย่างน้อย 2 ใน 3 เดือน (ประกาศที่ 3/2569)</p>
+    <div class="qgrid">${cards}</div>
+    <div class="two">
+      <div>
+        <div class="mini-row"><span>ผลงานสะสมทั้งปี</span><span class="v ${R.cases>=24?'ok':''}">${C1(R.cases)} ราย</span></div>
+        <div class="mini-row"><span>FYC สะสมทั้งปี</span><span class="v ${R.fyc>=160000?'ok':''}">${THB(R.fyc)}</span></div>
+        <div class="mini-row"><span>ไตรมาสติดต่อกันสูงสุด</span><span class="v ${R.streak?'ok':''}">${R.streak} ไตรมาส</span></div>
+        <div style="font-size:16px;color:var(--muted2);margin-top:4px">เกณฑ์ผ่านทั้งปี: ≥ 24 ราย และ FYC ≥ 160,000 ${R.annualGate?'✔ ผ่านแล้ว':'— ยังไม่ผ่าน'}</div>
+      </div>
+      <div class="trophy ${has?'on':''}">
+        <div style="font-size:17px;margin-bottom:6px">🏆 ระดับคุณวุฒิที่ทำได้</div>
+        <div class="big">${has?`คุณวุฒิระดับ ${R.achievedLevel} ไตรมาส`:'ยังไม่ถึงระดับ 1'}</div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed ${has?'#ffffff33':'var(--line2)'};display:flex;justify-content:space-between;align-items:baseline">
+          <span style="font-size:17px">เงินรางวัลโดยประมาณ</span><span style="font-size:27px;font-weight:800">${THB(R.reward)}</span></div>
+      </div>
+    </div>
+    ${R.achievedLevel<4?`<div class="alert-box tip" style="margin-top:14px"><div class="title">🎯 ก้าวถัดไป: คุณวุฒิระดับ ${nextLevel} ไตรมาส</div>
+      ${nextLevel>R.streak?`<div class="line">· ต้องผ่านเกณฑ์ไตรมาสติดต่อกันเพิ่มอีก ${nextLevel-R.streak} ไตรมาส</div>`:''}
+      ${R.cases<24?`<div class="line">· ผลงานสะสมทั้งปี ขาดอีก ${C1(24-R.cases)} ราย</div>`:''}
+      ${R.fyc<160000?`<div class="line">· FYC สะสมทั้งปี ขาดอีก ${THB(160000-R.fyc)}</div>`:''}
+      <div class="line s-ok" style="margin-top:4px">ถ้าทำได้ครบ จะได้รับ ${THB(STREAK_REWARDS[nextLevel])}</div></div>`:''}
+  </div>`;
+}
+function joiningCard(R){
+  const J=R.joining;if(!J)return'';
+  return `<div class="card">
+    <h3>Joining Bonus (ตัวแทนใหม่)</h3>
+    <p class="sub">จ่ายให้ตัวแทนใหม่ภายใน 4 เดือนแรกนับจากเดือนที่มีผลงานขึ้นแรก (รบข. 4/2564) — เกณฑ์ 2 ราย + FYC 6,500 ต่อเดือน</p>
+    <div class="jbgrid">${J.months.map((m,i)=>`<div class="jbcard" style="background:${GOLD_TINTS[i]};border-left-color:${m.qualifies?'var(--good)':'var(--bad)'}">
+      <div class="head"><span>เดือนที่ ${i+1} (${THAI_MONTH_SHORT[i]})</span><span>${m.qualifies?'✔':'✕'}</span></div>
+      <div class="mini-row"><span>รายใหม่</span><span class="v ${m.count>=2?'ok':''}">${C1(m.count)} ราย</span></div>
+      <div class="mini-row"><span>FYC</span><span class="v ${m.fyc>=6500?'ok':''}">${THB(m.fyc)}</span></div>
+      <div style="margin-top:6px;font-size:16px;color:var(--muted)">ได้รับ: <b style="color:${m.paid?'var(--good)':'var(--muted2)'}">${THB(m.paid)}</b></div></div>`).join("")}</div>
+    <div class="annual-box">
+      <div class="mini-row"><span>ผลงานสะสม 4 เดือน</span><span class="v">${C1(J.cumCases)} ราย · ${THB(J.cumFyc)}</span></div>
+      <div class="mini-row"><span>จ่ายรายเดือน</span><span class="v">${THB(J.paid)}</span></div>
+      <div class="mini-row"><span>เติมให้ครบตามตารางสะสม</span><span class="v">+ ${THB(J.topUp)}</span></div>
+      <div style="border-top:1px dashed #4FAE7455;margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;gap:8px">
+        <span style="font-weight:700;color:var(--navy-deep);font-size:19px">รวม Joining Bonus (สูงสุด ${THB(JOINING_BONUS_CAP)})</span>
+        <span style="font-weight:800;font-size:25px;color:var(--good)">${THB(J.total)}</span></div>
+    </div>
+    ${D.agent.billing==="monthly"?`<div class="foot-note">ขายรายเดือน: เดือนที่ 2 ไม่มี FYC จากงานเดือนแรก (เว้น 1 เดือน) อาจทำให้ไม่ผ่านเกณฑ์ FYC เดือนนั้น</div>`:''}
+  </div>`;
+}
+
+/* ---------- แท็บ UM ---------- */
+function renderUmTab(Y){
+  const u=D.um,U=Y.um[selYear],pos=U.pos,r=U.r;
+  const teamRows=Y.um.map((x,y)=>`<td class="num">${C1(x.oldCount)}</td>`);
+  const newRow=D.um.newPerYear.map((v,y)=>`<td>${numIn("um.newPerYear."+y,v,"width:70px;text-align:center;padding:5px 6px;font-size:18px")}</td>`).join("");
+  const monthRows=U.cfyc.map((c,m)=>{const cum=U.cfyc.slice(0,m+1).reduce((a,b)=>a+b,0),prev=U.cfyc.slice(0,m).reduce((a,b)=>a+b,0);
+    const q=Math.min(m+1,Math.floor(cum/pos.cfycMonth))-(m>0?Math.min(m,Math.floor(prev/pos.cfycMonth)):0);
+    return `<tr><td style="color:var(--navy-deep);font-weight:600">${THAI_MONTH_SHORT[m]}</td><td class="r">${THB(c)}</td><td class="r">${THB(q*pos.salary)}</td><td class="r">${THB(c*pos.tenurePct/100)}</td></tr>`}).join("");
+  const i7byGroup={};U.item7Detail.forEach(d=>{const k=d.group;i7byGroup[k]=i7byGroup[k]||{n:d.n,rows:[]};i7byGroup[k].rows.push(d)});
+  return `
+  <div class="card dark"><div class="grid-bg"></div>
+    ${togHead("team","🎯 สมมติฐานทีม UM")}
+    ${collapsed.team?'':`
+    <p class="sub">ผลงานต่อคนดึงจากสมมติฐานในแท็บตัวแทน (ขายเดือนละ ${Y.A.cases} ราย) · ทุกคนทำงานเต็มปี · ข้อ 4 ได้เฉพาะตัวแทนใหม่</p>
+    <div class="form-grid">
+      ${field("ตำแหน่ง UM",`<select data-bind="um.position">${UM_POSITIONS.map(p=>`<option value="${p.value}" ${u.position===p.value?"selected":""}>${p.label}</option>`).join("")}</select>`)}
+      ${field("ตัวแทนอยู่ต่อปีถัดไป (%)",numIn("um.retention",u.retention,"5"))}
+    </div>
+    <label class="chk" style="margin-top:12px"><input type="checkbox" data-bind="um.includeOwn" ${u.includeOwn?"checked":""}> นับผลงานขายเองของ UM รวมใน CFYC</label>
+    <div class="scroll" style="margin-top:12px"><table style="color:#fff">
+      <thead><tr style="color:#B9C4D6"><th>จำนวนตัวแทน</th>${Y.um.map((x,y)=>`<th class="r">ปี ${y+1}</th>`).join("")}</tr></thead>
+      <tbody>
+        <tr><td style="color:#B9C4D6">ตัวแทนใหม่ (กรอก)</td>${newRow}</tr>
+        <tr><td style="color:#B9C4D6">ตัวแทนเก่า (คำนวณ)</td>${Y.um.map(x=>`<td class="num" style="color:#fff">${C1(x.oldCount)}</td>`).join("")}</tr>
+        <tr><td style="color:#fff;font-weight:700">รวมในทีม</td>${Y.um.map(x=>`<td class="num" style="color:#9CE3B8">${C1(x.teamCount)}</td>`).join("")}</tr>
+      </tbody></table></div>`}
+  </div>
+  ${yearPicker()}
+  <div class="card dark"><div class="grid-bg"></div>
+    <h3>ผลประโยชน์ UM ปีที่ ${selYear+1} (${pos.label})</h3>
+    <p class="sub">ทีม ${C1(U.teamCount)} คน (เก่า ${C1(U.oldCount)} · ใหม่ ${C1(U.newCount)}) · CFYC ทั้งปี ${THB(r.annualCFYC)} · โควตา ${THB(pos.cfycYear)}/ปี</p>
+    <div class="income-grid">
+      <div class="income-chip"><div class="lbl">1. เงินเดือน</div><div class="val">${THB(U.item1)}</div><div class="when">${r.quotaMonths} เดือนที่ครบโควตา</div></div>
+      <div class="income-chip"><div class="lbl">2. ค่าขยายงาน</div><div class="val">${THB(U.item2)}</div><div class="when">CFYC × ${pos.tenurePct}%</div></div>
+      <div class="income-chip"><div class="lbl">3. โบนัสส่วนเกินโควตา</div><div class="val">${THB(U.item3)}</div><div class="when">มิ.ย. + สิ้นปี</div></div>
+      <div class="income-chip"><div class="lbl">4. ค่าเสริมมือ</div><div class="val">${THB(U.item4)}</div><div class="when">ตัวแทนใหม่ 12 เดือนแรก</div></div>
+      <div class="income-chip"><div class="lbl">6. DPO</div><div class="val">${THB(U.item6)}</div><div class="when">รายไตรมาส</div></div>
+      <div class="income-chip"><div class="lbl">7. ค่าสร้างและรักษาตัวแทน</div><div class="val">${THB(U.item7)}</div><div class="when">รายไตรมาส</div></div>
+    </div>
+    <div class="total-line"><span class="l">รวมผลประโยชน์ UM · เฉลี่ย ${THB(U.total/12)}/เดือน</span><span class="v">${THB(U.total)}</span></div>
+    ${U.teamJoining?`<div style="font-size:15px;color:#B9C4D6;margin-top:8px">ข้อมูลประกอบ: ตัวแทนใหม่ ${C1(U.newCount)} คนได้ Joining Bonus รวม ${THB(U.teamJoining)} (เป็นรายได้ของตัวแทน ไม่รวมในยอด UM)</div>`:''}
+  </div>
+
+  <div class="card">
+    ${togHead("explain",`📘 เงื่อนไขผลประโยชน์ UM (${pos.label})`)}
+    ${collapsed.explain?'':`
+    <div class="tech-row"><span class="lab">1. เงินเดือน</span><span class="val">${THB(pos.salary)}/เดือน</span></div><div class="cond">CFYC สะสมเต็มโควตา (${THB(pos.cfycMonth)}) ครบ 1 เดือน = รับเงินเดือน 1 เดือน</div>
+    <div class="tech-row"><span class="lab">2. ค่าขยายงาน</span><span class="val">${pos.tenurePct}%</span></div><div class="cond">CFYC จริงแต่ละเดือน × ${pos.tenurePct}%</div>
+    <div class="tech-row"><span class="lab">3. โบนัสส่วนเกินโควตา</span><span class="val">โควตาปี ${THB(pos.cfycYear)}</span></div><div class="cond">CFYC เกินโควตาทั้งปี นำส่วนเกินคิด % ตามขั้นบันได · สิ้น มิ.ย. ถ้าเกินโควตาแล้วรับงวดแรก สิ้นปีคิดทั้งปีหักงวดแรก</div>
+    <div class="tech-row"><span class="lab">4. ค่าเสริมมือ</span><span class="val">30%</span></div><div class="cond">30% ของ FYC ตัวแทนใหม่ ใน 12 เดือนแรก ไม่มีเกณฑ์ขั้นต่ำ</div>
+    <div class="tech-row"><span class="lab">5. ค่ารักษาทีมงาน</span><span class="val">500/หน่วยตรง</span></div><div class="cond">500 ต่อหน่วยตรงที่ผลงานครบโควตา (ยังไม่คำนวณให้ เหมือนต้นฉบับ)</div>
+    <div class="tech-row"><span class="lab">6. DPO</span><span class="val">เกณฑ์ ${THB(r.threshold6)}/ไตรมาส</span></div><div class="cond">ทำได้ 100% ของเกณฑ์ = 20%, 175% = 22%, 250% = 25%</div>
+    <div class="tech-row"><span class="lab">7. ค่าสร้างและรักษาตัวแทน</span></div><div class="cond">ตัวแทนมีรายใหม่ ≥ 2 รายในไตรมาส จ่ายตามระดับ FYC/ไตรมาส/คน (สตาร์ 3,500 / ระดับ1 2,000 / ระดับ2 1,500 / ระดับ3 1,050 / ระดับ4 700)</div>`}
+  </div>
+
+  <div class="card">
+    ${togHead("monthlyCalc",`🧮 คำนวณผลประโยชน์ UM รายเดือน ปีที่ ${selYear+1}`)}
+    ${collapsed.monthlyCalc?'':`
+    <p class="sub">แสดงที่มาของตัวเลขแต่ละข้อ แยกรายเดือน</p>
+    <div class="scroll"><table class="qtable"><thead><tr><th>เดือน</th><th class="r">CFYC</th><th class="r">ข้อ1 เงินเดือน</th><th class="r">ข้อ2 ค่าขยายงาน</th></tr></thead><tbody>${monthRows}
+      <tr style="border-top:2px solid var(--line2)"><td style="color:var(--navy);font-weight:700">รวม</td><td class="r">${THB(r.annualCFYC)}</td><td class="r">${THB(U.item1)}</td><td class="r">${THB(U.item2)}</td></tr></tbody></table></div>
+    <div style="margin-top:14px;padding-top:10px;border-top:1px dashed var(--line2)">
+      <div class="tech-row"><span class="lab">3. โบนัสส่วนเกินโควตา</span><span class="val good">${THB(U.item3)}</span></div>
+      <div class="cond">CFYC ทั้งปี ${THB(r.annualCFYC)} − โควตา ${THB(r.quota3)} = ส่วนเกิน ${THB(r.excessAmount)} (${C1(r.excessPct)}%) × ${r.rate3}%${r.flat3?` + โบนัส2 ${THB(r.flat3)}`:''}${r.interimItem3?` · งวดแรก มิ.ย. ${THB(r.interimItem3)} + สิ้นปี ${THB(r.item3)}`:''}</div>
+      ${r.excessAmount<=0?`<div class="alert-box"><div class="line">⚠ CFYC ยังไม่เกินโควตาปี ขาดอีก ${THB(r.quota3-r.annualCFYC+r.quota3*0.01)} จะเริ่มได้ ${NEW_AGENT_PROFIT_TABLE[pos.value].rates[0]}%</div></div>`
+        :r.nextBand&&r.nextBand.shortfall>0?`<div class="alert-box tip"><div class="line">🎯 ขาดอีก CFYC ${THB(r.nextBand.shortfall)} จะขยับเป็นอัตรา ${r.nextBand.rate}%</div></div>`:''}
+      <div class="tech-row" style="margin-top:8px"><span class="lab">4. ค่าเสริมมือ</span><span class="val good">${THB(U.item4)}</span></div>
+      <div class="cond">ตัวแทนใหม่ ${C1(U.newCount)} คน × FYC ปีแรก ${THB(U.newAgentFyc)} × 30%</div>
+      <div class="tech-row"><span class="lab">6. DPO</span><span class="val good">${THB(U.item6)}</span></div>
+      <div class="cond">${r.item6Detail.map(d=>`ไตรมาส ${d.q}: ${THB(d.qf)} × ${d.rate}% = ${THB(d.reward)}`).join("<br>")}</div>
+      <div class="tech-row"><span class="lab">7. ค่าสร้างและรักษาตัวแทน</span><span class="val good">${THB(U.item7)}</span></div>
+      ${Object.keys(i7byGroup).length?`<div class="scroll"><table class="qtable" style="margin-bottom:8px"><thead><tr><th>กลุ่ม</th><th>ไตรมาส</th><th>ระดับ/คน</th><th class="r">ได้รับ</th></tr></thead><tbody>
+        ${Object.entries(i7byGroup).map(([g,o])=>o.rows.map(d=>`<tr><td>${g} (${C1(o.n)} คน)</td><td>${d.q}</td><td>${d.level}</td><td class="r" style="color:var(--good)">${THB(d.reward)}</td></tr>`).join("")).join("")}</tbody></table></div>`:''}
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:2px solid var(--line2);display:flex;justify-content:space-between;align-items:baseline">
+      <span style="font-weight:700;color:var(--navy-deep);font-size:19px">รวมผลประโยชน์ UM ทั้งปี</span><span style="font-weight:800;font-size:25px;color:var(--good)">${THB(U.total)}</span></div>`}
+  </div>
+
+  <div class="card">
+    <h3>📅 ผลประโยชน์ UM 5 ปี</h3>
+    <p class="sub">แตะแต่ละปีเพื่อขยายดูรายข้อ</p>
+    <div class="scroll"><table>
+      <thead><tr><th>ปี</th><th class="r">ทีม (คน)</th><th class="r">CFYC</th><th class="r">รวม UM</th><th class="r">เฉลี่ย/เดือน</th></tr></thead>
+      <tbody>${Y.um.map((x,y)=>{const open=!!umOpenYears[y];
+        let h=`<tr class="yr ${open?'open':''}" data-open-umyear="${y}"><td>${open?'▼':'▶'} ปีที่ ${y+1}</td><td class="num">${C1(x.teamCount)}</td><td class="num">${THB(x.r.annualCFYC)}</td><td class="num" style="color:var(--good)">${THB(x.total)}</td><td class="num">${THB(x.total/12)}</td></tr>`;
+        if(open)h+=[["1. เงินเดือน","item1"],["2. ค่าขยายงาน","item2"],["3. โบนัสส่วนเกินโควตา","item3"],["4. ค่าเสริมมือ","item4"],["6. DPO","item6"],["7. ค่าสร้างและรักษาตัวแทน","item7"]].map(([l,k])=>`<tr class="mrow"><td>${l}</td><td></td><td></td><td class="num">${THB(x[k])}</td><td></td></tr>`).join("");
+        return h}).join("")}
+        <tr class="sum"><td>รวม 5 ปี</td><td></td><td class="num">${THB(Y.um.reduce((s,x)=>s+x.r.annualCFYC,0))}</td><td class="num">${THB(Y.um.reduce((s,x)=>s+x.total,0))}</td><td></td></tr>
+      </tbody></table></div>
+  </div>
+  <div class="foot-note">* ข้อ 5 (ค่ารักษาทีมงาน) ยังไม่คำนวณ เหมือนต้นฉบับ · ตำแหน่งคงที่ทั้ง 5 ปี · ประมาณการเท่านั้น</div>`;
+}
+
+/* ---------- แท็บ ผู้สนใจ ---------- */
+function renderProspectTab(){
+  const p=D.prospect;
+  return `<div class="card">
+    <h3>🙋 ข้อมูลผู้สนใจ</h3><p class="sub">ใช้เทียบรายได้งานเดิมในแท็บสรุป · รายได้ที่ต้องการกรอกในแท็บตัวแทน</p>
+    <div class="form-grid">
+      ${field("ชื่อ",`<input type="text" data-bind="prospect.name" id="in-pname" value="${esc(p.name)}" placeholder="เช่น คุณแพร">`)}
+      ${field("อายุ",numIn("prospect.age",p.age))}
+      ${field("อาชีพปัจจุบัน",`<input type="text" data-bind="prospect.job" id="in-pjob" value="${esc(p.job)}">`)}
+      ${field("เวลาที่ทำได้",`<select data-bind="prospect.mode"><option value="full" ${p.mode==="full"?"selected":""}>เต็มเวลา</option><option value="part" ${p.mode==="part"?"selected":""}>พาร์ทไทม์</option></select>`)}
+      ${field("รายได้ปัจจุบัน (บาท/เดือน)",numIn("prospect.income",p.income))}
+      ${field("รายได้งานเดิมเพิ่มปีละ (%)",numIn("prospect.raise",p.raise))}
+      ${field("บันทึกเพิ่มเติม",`<textarea data-bind="prospect.note" id="in-pnote" rows="2">${esc(p.note)}</textarea>`,"full")}
+    </div>
+    <div class="btns"><button class="btn-primary" id="btn-save-p">💾 บันทึกผู้สนใจ</button><button class="btn-ghost" id="btn-new-p">+ เริ่มคนใหม่</button></div>
+  </div>
+  <div class="card"><h3>👥 รายชื่อที่บันทึกไว้</h3>
+    ${store.prospects.length?store.prospects.map((x,i)=>`<div class="saved"><div><b>${esc(x.data.prospect.name)}</b><div style="font-size:15px;color:var(--muted2)">${esc(x.data.prospect.job||'')} · บันทึก ${esc(x.saved)}</div></div>
+      <div style="display:flex;gap:6px"><button class="btn-ghost" data-load="${i}">เปิด</button><button class="btn-ghost bad" data-del="${i}">ลบ</button></div></div>`).join("")
+      :`<div style="text-align:center;padding:24px;color:var(--muted2)">ยังไม่มีรายชื่อ กรอกข้อมูลแล้วกด "บันทึกผู้สนใจ"</div>`}
+  </div>`;
+}
+
+function renderSummaryTab(Y){
+  const p=D.prospect,raise=p.raise/100;
+  const withUm=D.um.inSummary!==false;const rows=Y.ag.map((R,y)=>{const old=p.income*12*Math.pow(1+raise,y),um=withUm?Y.um[y].total:0;return {y,old,ag:R.total,um,tot:R.total+um}});
+  const y3=rows[2],nm=p.name.trim()||"ผู้สนใจ";
+  const tgt=(+D.agent.target||0)/(D.agent.targetUnit==='year'?12:1),hit=rows.find(r=>r.tot/12>=tgt);
+  return `<div class="card dark"><div class="grid-bg"></div>
+    <h3>แผนรายได้ของ${esc(nm)}</h3>
+    <p class="sub">${[esc(p.job||''),p.age?`อายุ ${esc(p.age)} ปี`:'',`ขายเดือนละ ${Y.A.cases} ราย เบี้ย ${THB(D.agent.premium)} ${MODE_UNIT[D.agent.billing]}`].filter(Boolean).join(' · ')}</p>
+    <label class="chk noprint"><input type="checkbox" data-bind="um.inSummary" ${withUm?'checked':''}> รวมรายได้ UM (ตามทีมในแท็บ UM)</label>
+    <div class="hero-vs"><div><div style="font-size:15px;color:#B9C4D6">งานเดิม ปีที่ 3 (ต่อเดือน)</div><div class="old">${THB(y3.old/12)}</div></div>
+      <div><div style="font-size:15px;color:#B9C4D6">${withUm?'ตัวแทน + UM':'ตัวแทน'} ปีที่ 3 (ต่อเดือน)</div><div class="new">${THB(y3.tot/12)}</div></div></div>
+    <div class="total-line"><span class="l">รวม 5 ปี มากกว่างานเดิม</span><span class="v">${THB(rows.reduce((s,r)=>s+r.tot-r.old,0))}</span></div>
+    ${tgt?`<div style="font-size:15px;color:${hit?'#9CE3B8':'#F5C6C0'};margin-top:8px">${hit?`🎯 ถึงรายได้ที่อยากได้ ${THB(tgt)}/เดือน ในปีที่ ${hit.y+1}`:`ยังไม่ถึงรายได้ที่อยากได้ ${THB(tgt)}/เดือน ภายใน 5 ปี — ลองปรับสมมติฐาน`}</div>`:''}
+  </div>
+  <div class="card"><h3>📊 เทียบรายได้ 5 ปี</h3><p class="sub">ต่อเดือน (เฉลี่ยทั้งปี)</p>
+    ${chartSvg(rows)}
+    <div class="scroll" style="margin-top:10px"><table><thead><tr><th>ปี</th><th class="r">งานเดิม</th><th class="r">ตัวแทน</th><th class="r">UM</th><th class="r">รวม</th><th class="r">ต่าง</th></tr></thead><tbody>
+      ${rows.map(r=>{const d=(r.tot-r.old)/12;return `<tr><td>ปีที่ ${r.y+1}</td><td class="num" style="color:var(--muted2)">${THB(r.old/12)}</td><td class="num">${THB(r.ag/12)}</td><td class="num">${THB(r.um/12)}</td><td class="num" style="color:var(--good)">${THB(r.tot/12)}</td><td class="num" style="color:${d>=0?'var(--good)':'var(--bad)'}">${d>=0?'+':'-'}${THB(Math.abs(d))}</td></tr>`}).join("")}
+    </tbody></table></div>
+  </div>
+  <div class="card"><h3>🚀 ขั้นตอนเริ่มต้น</h3>
+    <ol class="steps">${D.steps.split("\n").filter(s=>s.trim()).map(s=>`<li>${esc(s)}</li>`).join("")}</ol>
+    <details class="noprint" style="margin-top:10px"><summary style="cursor:pointer;color:var(--navy);font-size:17px">แก้ไขขั้นตอน (บรรทัดละ 1 ขั้น)</summary>
+      <textarea data-bind="steps" id="in-steps" rows="6" style="margin-top:6px">${esc(D.steps)}</textarea></details>
+  </div>
+  <div class="btns noprint"><button class="btn-primary" onclick="window.print()">🖨️ พิมพ์ / บันทึก PDF</button></div>
+  <div class="foot-note">* ประมาณการตามสมมติฐานที่กรอก ไม่ใช่การรับประกันรายได้ · ไม่รวมค่ารักษาทีมงาน (ข้อ 5) และการแข่งขันพิเศษ</div>`;
+}
+function chartSvg(rows){
+  const W=640,H=260,pl=58,pb=28,pt=10,mx=Math.max(1,...rows.map(r=>Math.max(r.old,r.tot)))/12*1.1;
+  const bw=(W-pl)/rows.length,y=v=>pt+(H-pt-pb)*(1-v/mx),K=n=>n>=1e6?(n/1e6).toFixed(1)+"M":Math.round(n/1e3)+"k";
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="กราฟเทียบรายได้ต่อเดือน 5 ปี">`;
+  for(let i=0;i<=4;i++){const v=mx*i/4;s+=`<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line2)"/><text x="${pl-6}" y="${y(v)+4}" font-size="17" text-anchor="end">${K(v)}</text>`}
+  rows.forEach((r,i)=>{const x=pl+i*bw+bw*.14,w=bw*.32,o=r.old/12,a=r.ag/12,u=r.um/12;
+    s+=`<rect x="${x}" y="${y(o)}" width="${w}" height="${y(0)-y(o)}" rx="3" fill="#A9B4C2"/>`;
+    s+=`<rect x="${x+w+4}" y="${y(a)}" width="${w}" height="${y(0)-y(a)}" rx="3" fill="var(--navy)"/>`;
+    if(u>0)s+=`<rect x="${x+w+4}" y="${y(a+u)}" width="${w}" height="${y(a)-y(a+u)}" rx="3" fill="#4FAE74"/>`;
+    s+=`<text x="${x+w+2}" y="${H-8}" font-size="18" text-anchor="middle">ปีที่ ${i+1}</text>`});
+  return s+`</svg><div class="legend"><span><b style="color:#A9B4C2">■</b> งานเดิม</span><span><b style="color:var(--navy)">■</b> ตัวแทน</span><span><b style="color:#4FAE74">■</b> UM</span></div>`;
+}
+
+/* ================= MAIN RENDER ================= */
+function render(){
+  const Y=allYears();
+  renderTabNav();
+  document.getElementById("tab-content").innerHTML=
+    activeTab==="prospect"?renderProspectTab():activeTab==="agent"?renderAgentTab(Y):activeTab==="um"?renderUmTab(Y):renderSummaryTab(Y);
+  save();
+}
+function setBind(path,val,isNum){
+  const k=path.split(".");let o=D;for(let i=0;i<k.length-1;i++)o=o[k[i]];
+  const last=k[k.length-1];
+  if(path==="agent.billing"&&val!==D.agent.billing){const annual=D.agent.premium*(MODE_INST[D.agent.billing]||1);D.agent.premium=Math.round(annual/(MODE_INST[val]||1));}
+  o[last]=typeof val==="boolean"?val:isNum?(path==="prospect.age"&&val===""?"":Math.max(0,parseFloat(String(val).replace(/,/g,""))||0)):val;
+}
+let rt=null,refocusing=false;
+function rerenderKeepFocus(id){render();const n=id&&document.getElementById(id);if(n){refocusing=true;n.focus();const L=n.value.length;try{n.setSelectionRange(L,L)}catch(_){}refocusing=false}}
+document.addEventListener("focusin",e=>{const el=e.target;if(!el.classList||!el.classList.contains("nf")||refocusing)return;
+  if(el.dataset.old===undefined){el.dataset.old=el.value;el.value="";}});
+document.addEventListener("focusout",e=>{const el=e.target;if(!el.classList||!el.classList.contains("nf")||!el.isConnected)return;
+  if(el.value===""&&el.dataset.old!==undefined){el.value=el.dataset.old;setBind(el.dataset.bind,el.dataset.old,true);}
+  delete el.dataset.old;});
+document.addEventListener("input",e=>{
+  const el=e.target;
+  if(el.dataset.lab){sandbox[el.dataset.lab]=parseFloat(el.value);document.getElementById("lab-v-"+el.dataset.lab).textContent=fmtNum(el.value)+(el.dataset.lab==="cases"||el.dataset.lab==="premium"?"":"%");
+    clearTimeout(rt);rt=setTimeout(()=>{document.getElementById("lab-out").innerHTML=labOut()},60);return}
+  const b=el.dataset.bind;if(!b||el.tagName==="SELECT"||el.type==="checkbox")return;
+  if(el.classList.contains("nf")){
+    let raw=el.value.replace(/[^\d.]/g,"");const i=raw.indexOf(".");if(i>=0)raw=raw.slice(0,i+1)+raw.slice(i+1).replace(/\./g,"");
+    el.value=fmtNum(raw);if(raw==="")return;
+    setBind(b,raw,true);
+    const old=el.dataset.old,id=el.id;
+    clearTimeout(rt);rt=setTimeout(()=>{rerenderKeepFocus(id);const n=document.getElementById(id);if(n&&old!==undefined)n.dataset.old=old;},450);
+    return;
+  }
+  setBind(b,el.value,false);
+  clearTimeout(rt);rt=setTimeout(()=>{if(b.startsWith("prospect.")||b==="steps"){save();if(b==="steps"&&activeTab==="summary"){const id=el.id;rerenderKeepFocus(id)}return}render()},400);
+});
+document.addEventListener("change",e=>{
+  const b=e.target.dataset.bind;
+  if(b&&(e.target.tagName==="SELECT"||e.target.type==="checkbox")){setBind(b,e.target.type==="checkbox"?e.target.checked:e.target.value,false);render();return}
+  if(e.target.id==="year-select"){selYear=+e.target.value;render();}
+});
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab],[data-sub],[data-lab-mode],[data-toggle-box],[data-open-year],[data-open-umyear],[data-load],[data-del],#btn-save-p,#btn-new-p,#btn-export,#btn-import,#lab-apply,#lab-reset");
+  if(!t)return;
+  if(t.dataset.tab){activeTab=t.dataset.tab;window.scrollTo(0,0);render();return}
+  if(t.dataset.sub){agentSub=t.dataset.sub;render();return}
+  if(t.dataset.labMode){const ann=sandbox.premium*MODE_INST[sandbox.billing];sandbox.billing=t.dataset.labMode;const r=LAB_RANGES[sandbox.billing];sandbox.premium=Math.min(r[1],Math.max(r[0],Math.round(ann/MODE_INST[sandbox.billing]/r[2])*r[2]));
+    document.getElementById("lab-sliders").innerHTML=labSliders();document.getElementById("lab-out").innerHTML=labOut();return}
+  if(t.id==="lab-apply"){const nw=allYears(sandbox);["billing","premium","r1","r2","r3","r4","r5","persist"].forEach(k=>D.agent[k]=sandbox[k]);
+    D.agent.targetUnit="month";D.agent.target=Math.floor(nw.ag[0].total/12);sandbox=null;agentSub="perf";render();toast("ใช้ค่าใหม่แล้ว");return}
+  if(t.id==="lab-reset"){sandbox=null;render();return}
+  if(t.dataset.toggleBox){collapsed[t.dataset.toggleBox]=!collapsed[t.dataset.toggleBox];render();return}
+  if(t.dataset.openYear!==undefined){const y=+t.dataset.openYear;openYears[y]=!openYears[y];selYear=y;render();return}
+  if(t.dataset.openUmyear!==undefined){const y=+t.dataset.openUmyear;umOpenYears[y]=!umOpenYears[y];selYear=y;render();return}
+  if(t.dataset.load!==undefined){D=clone(store.prospects[+t.dataset.load].data);normalize();sandbox=null;render();toast("เปิด "+D.prospect.name);return}
+  if(t.dataset.del!==undefined){if(confirm("ลบรายชื่อนี้?")){store.prospects.splice(+t.dataset.del,1);render();toast("ลบแล้ว")}return}
+  if(t.id==="btn-save-p"){if(!D.prospect.name.trim()){toast("ใส่ชื่อก่อนบันทึก");return}
+    const rec={saved:new Date().toLocaleDateString("th-TH"),data:clone(D)};const i=store.prospects.findIndex(x=>x.data.prospect.name===D.prospect.name);
+    if(i>=0)store.prospects[i]=rec;else store.prospects.unshift(rec);render();toast("บันทึกแล้ว");return}
+  if(t.id==="btn-new-p"){const keep={agent:D.agent,um:D.um,steps:D.steps};D=clone(DEFAULT_DATA);Object.assign(D,clone(keep));render();toast("เริ่มคนใหม่ (ใช้สมมติฐานเดิม)");return}
+  if(t.id==="btn-export"){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(store,null,1)],{type:"application/json"}));a.download="recruit-backup.json";a.click();return}
+  if(t.id==="btn-import"){document.getElementById("file-import").click();return}
+});
+document.getElementById("file-import").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;
+  f.text().then(txt=>{try{const s=JSON.parse(txt);if(!s.current||!Array.isArray(s.prospects))throw 0;store=s;D=store.current;normalize();render();toast("โหลดข้อมูลแล้ว")}catch(_){toast("ไฟล์ไม่ถูกต้อง")}});e.target.value=""});
+render();
+
+if("serviceWorker" in navigator&&location.protocol==="https:"&&location.hostname.endsWith("github.io")){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+</script></body></html>
