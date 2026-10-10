@@ -805,7 +805,7 @@ const SUB_MIN = { e2: { u2: 1 }, e1: { u1: 1 }, r2: { e2: 1, u1: 1, u2: 1 }, r1:
 const LV = (k) => EXEC_LEVELS.find((l) => l.key === k) || EXEC_LEVELS[0];
 const defaultSubs = (levelKey) => Object.entries(SUB_MIN[levelKey] || {}).map(([t, n]) => ({ t, n, c: LV(t).q }));
 const defaultYear = (levelKey) => ({ level: levelKey, subs: defaultSubs(levelKey) });
-const UM_DEFAULT = { agents: 3, newPerYear: 2, includeOwn: true, newFromStart: false, years: Array.from({ length: 5 }, () => defaultYear("u2")) };
+const UM_DEFAULT = { agents: 3, newPerYear: 2, agentKeep: 100, includeOwn: true, newFromStart: false, years: Array.from({ length: 5 }, () => defaultYear("u2")) };
 const normUm = (u) => {
     const base = { ...UM_DEFAULT, ...(u || {}) };
     const fallback = u && (u.level === "u1" || u.level === "u2") ? u.level : "u2";
@@ -830,8 +830,11 @@ function calcUM(um, monthReport, quarters, masterYearSummary, safeCases, safePer
     const A0 = um.agents || 0, NP = um.newPerYear || 0;
     const own = um.includeOwn !== false;
     // ตัวแทนตรง: ทีมตั้งต้นเริ่มเดือนที่ 1 · ตัวแทนใหม่เข้าต้นปีที่ 1-5 ปีละ NP คน · ทุกคนทำผลงานเท่าแผนแทปตัวแทน
-    const cohorts = [{ n: A0, start: 0, isNew: !!um.newFromStart, label: "ทีมตั้งต้น" }];
-    for (let k = 0; k < 5; k++) if (NP) cohorts.push({ n: NP, start: 12 * k, isNew: true, label: `ตัวแทนใหม่ปีที่ ${k + 1}` });
+    // อัตราคงอยู่ของตัวแทน: ลดครั้งเดียวคงที่ ทุกกลุ่มเหลือ keep% (ปัดเป็นคนเต็ม) · ตัวแทนใหม่เริ่มเข้าต้นปีที่ 2 เป็นต้นไป
+    const keep = um.agentKeep == null ? 100 : um.agentKeep;
+    const eff = (n) => Math.round((n * keep) / 100);
+    const cohorts = [{ n: eff(A0), start: 0, isNew: !!um.newFromStart, label: "ทีมตั้งต้น" }];
+    for (let k = 1; k < 5; k++) if (NP) cohorts.push({ n: eff(NP), start: 12 * k, isNew: true, label: `ตัวแทนใหม่ปีที่ ${k + 1}` });
     const fycM = monthReport.map((r) => r.byYear[0]);
     const rycM = monthReport.map((r) => r.byYear[1] + r.byYear[2] + r.byYear[3] + r.byYear[4]);
     const months = Array.from({ length: 60 }, (_, t) => {
@@ -855,7 +858,7 @@ function calcUM(um, monthReport, quarters, masterYearSummary, safeCases, safePer
         const subOkUnits = subList.reduce((s, x) => s + ((x.c || 0) >= LV(x.t).q ? x.n : 0), 0);
         const cfycM = ms.map((m) => m.own + m.team + sub30M);
         const cfyc = cfycM.reduce((a, b) => a + b, 0);
-        const agentsCount = A0 + NP * (y + 1);
+        const agentsCount = cohorts.reduce((t, c) => t + (c.start <= 12 * y ? c.n : 0), 0);
         const minAgents = lv.g === "unit" ? 3 : 5;
         const quotaY = lv.q * 12, belowQuota = cfyc < quotaY, teamOk = agentsCount >= minAgents, structOk = subUnits >= lv.units;
         // เกณฑ์หลัก: CFYC ถึงโควต้า · โครงสร้างทีม/หน่วยเป็นการแจ้งเตือนเท่านั้น
@@ -1087,14 +1090,16 @@ function UmTab({ um, setUm, monthReport, quarters, masterYearSummary, safeCases,
     const data = rows.map((r) => ({ label: `ปี ${r.y}`, values: r.byType }));
     const details = rows.map((r) => ({ title: `ปีที่ ${r.y} · ${r.lv.n} — รายได้ผู้บริหาร`, items: UM_TYPES.map((t, gi) => ({ name: `${gi + 1}. ${t.n}`, color: t.color, v: r.byType[gi] })), note: `CFYC ${THB(r.cfyc)} (${(100 + r.over).toFixed(0)}% ของโควต้า) · ตัวแทนตรง ${r.agentsCount} คน · ดูวิธีคิดใน "ผลประโยชน์ผู้บริหาร แยกรายปี"` }));
     const maxAgents = Math.max(30, um.agents || 0), maxNew = Math.max(10, um.newPerYear || 0);
-    const teamSum = `ตัวแทนตรง ${um.agents || 0} คน + ใหม่ ${um.newPerYear || 0} คน/ปี · ${um.includeOwn === false ? "บริหารอย่างเดียว" : "ขายเองด้วย"}`;
+    const teamSum = `ตัวแทนตรง ${um.agents || 0} คน + ใหม่ ${um.newPerYear || 0} คน/ปี (เริ่มปีที่ 2) · คงอยู่ ${um.agentKeep == null ? 100 : um.agentKeep}% · ${um.includeOwn === false ? "บริหารอย่างเดียว" : "ขายเองด้วย"}`;
     const posSum = rows.map((r) => `ปี${r.y} ${r.lv.n}`).join(" → ");
     return React.createElement(React.Fragment, null,
         React.createElement("div", { className: "dash" },
             React.createElement(Detail, { tone: "ctrl", defaultOpen: true, title: "ทีมตัวแทนตรง", sub: `ทุกคนทำผลงานเท่าแทปตัวแทน · ${safeCases} ราย/เดือน · อัตราคงอยู่ ${safePersist}%`, summary: teamSum },
                 React.createElement(Slider, { label: "ตัวแทนตรงตอนเริ่ม", value: um.agents, onChange: (v) => upd("agents", v), min: 0, max: maxAgents, unit: "คน", color: NAVY }),
                 React.createElement(Slider, { label: "ตัวแทนใหม่เพิ่มต่อปี", value: um.newPerYear, onChange: (v) => upd("newPerYear", v), min: 0, max: maxNew, unit: "คน", color: GREEN_DEEP }),
-                React.createElement("div", { style: { fontSize: 15.5, color: MUTE, marginTop: 6 } }, `ปีที่ 5 จะมีตัวแทนตรง ${(um.agents || 0) + (um.newPerYear || 0) * 5} คน (ตัวแทนใหม่เข้าต้นปี)`),
+                React.createElement(Slider, { label: "อัตราคงอยู่ของตัวแทน", value: um.agentKeep == null ? 100 : um.agentKeep, onChange: (v) => upd("agentKeep", v), min: 0, max: 100, step: 5, unit: "%", color: GOLD }),
+                React.createElement("div", { style: { fontSize: 15.5, color: MUTE, marginTop: 6, lineHeight: 1.45 } }, `จำนวนตัวแทนตรงแต่ละปี: ${rows.map((r) => `ปี ${r.y} = ${r.agentsCount}`).join(" · ")} คน`,
+                    React.createElement("br", null), "ตัวแทนใหม่เริ่มเข้าต้นปีที่ 2 · อัตราคงอยู่ใช้กับทุกกลุ่ม (ปัดเป็นคนเต็ม)"),
                 lbl("ผู้บริหารขายเองด้วยไหม (FYC ขายเองนับเข้า CFYC)"),
                 grid2([chip("ขายเองด้วย", um.includeOwn !== false, () => upd("includeOwn", true)), chip("บริหารอย่างเดียว", um.includeOwn === false, () => upd("includeOwn", false))]),
                 lbl("ทีมตั้งต้นเป็นตัวแทนใหม่ที่สร้างเอง"),
@@ -1514,7 +1519,45 @@ function computeAgent({ safePremium, modeKey, safeRates, safeCases, safePersist,
     }, { byYear: [0, 0, 0, 0, 0], commissionSubtotal: 0, quarterlyBonus: 0, annualBonus: 0, collectBonus: 0, careerBenefit: 0, qualReward: 0, joining: 0, grandTotal: 0 });
     return { keepRatio, yearPersist, annualPremiumPerCase, perCase, monthReport, totalCommission5y, totalPremium5y, yearGroups, yearlyStacked, chunkSizeMonths, totalPeriodsAll, periodTrend, quarters, annualBonusByYear, safeTenureStart, careerByYear, masterYearSummary, grand5y, careerY5, promo };
 }
-const APP_VERSION = "2.7 · 10/10/2026";
+const APP_VERSION = "2.9 · 10/10/2026";
+// ===== แจ้งเตือนเวอร์ชันใหม่: เปิดแอป/กลับมาที่แอป จะเช็กไฟล์ล่าสุดบนเว็บ ถ้าใหม่กว่าจะขึ้นแถบแจ้งเตือนพร้อมวิธีอัปเดต =====
+const verNum = (v) => { const m = String(v || "").match(/(\d+)\.(\d+)/); return m ? +m[1] * 1000 + +m[2] : 0; };
+function UpdateBanner() {
+    const [remote, setRemote] = useState(null);
+    const [hide, setHide] = useState(false);
+    const [tried, setTried] = useState(false);
+    useEffect(() => {
+        const check = async () => {
+            try {
+                const res = await fetch(location.pathname + "?check=" + Date.now(), { cache: "no-store" });
+                const txt = await res.text();
+                const m = txt.match(/APP_VERSION = "([^"]+)"/);
+                if (m && verNum(m[1]) > verNum(APP_VERSION)) setRemote(m[1]);
+            } catch (e) { /* ออฟไลน์อยู่ ไม่ต้องแจ้ง */ }
+        };
+        check();
+        const onVis = () => { if (document.visibilityState === "visible") check(); };
+        document.addEventListener("visibilitychange", onVis);
+        try { setTried(sessionStorage.getItem("recruiting-update-tried") === "1"); } catch (e) {}
+        return () => document.removeEventListener("visibilitychange", onVis);
+    }, []);
+    if (!remote || hide) return null;
+    const update = () => {
+        try { sessionStorage.setItem("recruiting-update-tried", "1"); } catch (e) {}
+        location.replace(location.pathname + "?v=" + encodeURIComponent(remote.split(" ")[0]) + "&t=" + Date.now());
+    };
+    return React.createElement("div", { style: { background: "#FFF3DC", border: "2px solid #E39B2E", borderRadius: 16, padding: "12px 14px", marginBottom: 14, color: INK } },
+        React.createElement("div", { style: { fontSize: 19, fontWeight: 800, color: NAVY } }, "🔔 มีเวอร์ชันใหม่แล้ว"),
+        React.createElement("div", { style: { fontSize: 16, marginTop: 2 } }, `เวอร์ชันใหม่ ${remote} · ตอนนี้เปิดอยู่ ${APP_VERSION}`),
+        React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 8, marginTop: 10 } },
+            React.createElement("button", { onClick: update, style: { padding: "11px", borderRadius: 12, border: "none", background: NAVY, color: "#fff", fontWeight: 800, fontSize: 17.5, cursor: "pointer" } }, "อัปเดตเลย"),
+            React.createElement("button", { onClick: () => setHide(true), style: { padding: "11px", borderRadius: 12, border: "1px solid #E5C98E", background: "#fff", color: NAVY, fontWeight: 700, fontSize: 16.5, cursor: "pointer" } }, "ไว้ทีหลัง")),
+        React.createElement("div", { style: { fontSize: 15, color: MUTE, marginTop: 10, lineHeight: 1.55 } },
+            React.createElement("b", { style: { color: tried ? "#C0392B" : NAVY } }, tried ? "กดแล้วยังเป็นเวอร์ชันเดิม? ทำตามนี้:" : "ถ้ากดแล้วยังเป็นเวอร์ชันเดิม:"),
+            React.createElement("br", null), "1) ปิดแอปให้สนิท: ปัดขึ้นจากขอบล่างค้างไว้ แล้วปัดหน้าแอปนี้ทิ้ง จากนั้นเปิดใหม่",
+            React.createElement("br", null), "2) ถ้ายังไม่ได้ รอประมาณ 10 นาที (เว็บกำลังอัปเดต) แล้วปิด-เปิดแอปอีกครั้ง",
+            React.createElement("br", null), "ข้อมูลที่กรอกไว้ไม่หายค่ะ"));
+}
 function CommissionPlanner() {
     const [modeKey, setModeKey] = useState(DEFAULTS.modeKey);
     const [premiumPerInstallment, setPremiumPerInstallment] = useState(DEFAULTS.premiumPerInstallment);
@@ -1632,7 +1675,7 @@ function CommissionPlanner() {
     const planSum = `${safeCases} ราย/เดือน · ${THB(safePremium)} บาท/งวด (${modeLabel}) · คงอยู่ ${safePersist}%`;
     const buildSpec = (o) => o.kind === "um" ? {
         title: "แผนรายได้ผู้บริหารตัวแทน (UM) 5 ปี",
-        plan: [`ทีมตัวแทนตรงเริ่ม ${o.um.agents || 0} คน + ตัวแทนใหม่ ${o.um.newPerYear || 0} คน/ปี · ทุกคนขาย ${safeCases} ราย/เดือน`, `ตำแหน่ง: ${o.rows.map((r) => `ปี ${r.y} ${r.lv.n}`).join(" · ")}`],
+        plan: [`ทีมตัวแทนตรงเริ่ม ${o.um.agents || 0} คน + ตัวแทนใหม่ ${o.um.newPerYear || 0} คน/ปี ตั้งแต่ปีที่ 2 · คงอยู่ ${o.um.agentKeep == null ? 100 : o.um.agentKeep}% · ทุกคนขาย ${safeCases} ราย/เดือน`, `ตำแหน่ง: ${o.rows.map((r) => `ปี ${r.y} ${r.lv.n}`).join(" · ")}`],
         totalLabel: "รายได้ผู้บริหารรวม 5 ปี (8 ประเภท)", total: o.tot, data: o.data, series: o.series,
         highlights: [`ปีที่ 5 ทีมมีตัวแทนตรง ${o.rows[4].agentsCount} คน · หน่วยใต้สังกัด ${o.rows[4].subUnits} หน่วย`],
     } : {
@@ -1679,6 +1722,7 @@ function CommissionPlanner() {
                         " ทีมงานป้าเป็ด CFP®"),
                     React.createElement("div", { style: { fontSize: 28, fontWeight: 800, marginTop: 3, lineHeight: 1.2 } }, "Recruiting"),
                     React.createElement("div", { style: { fontWeight: 600, fontSize: 15, color: "#EAF7FF", marginTop: 2 } }, "\u0E02\u0E32\u0E22\u0E17\u0E38\u0E01\u0E40\u0E14\u0E37\u0E2D\u0E19 \u00B7 \u0E14\u0E39\u0E23\u0E32\u0E22\u0E44\u0E14\u0E49 60 \u0E40\u0E14\u0E37\u0E2D\u0E19 (5 \u0E1B\u0E35)"))),
+            React.createElement(UpdateBanner, null),
             React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 } },
                 React.createElement("div", { style: { fontSize: 19, fontWeight: 700, color: saveStatus ? GREEN_DEEP : MUTE, minHeight: 18 } }, saveStatus || "บันทึกข้อมูลอัตโนมัติทุกครั้งที่แก้ไข"),
                 React.createElement("div", { style: { display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 } }, React.createElement("button", { onClick: handleClearAll, style: {
