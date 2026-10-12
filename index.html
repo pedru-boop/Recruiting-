@@ -1313,6 +1313,16 @@ function YearBars({ data, series, height = 190, details }) {
                 React.createElement("span", { style: { width: 13, height: 13, borderRadius: 3, background: s.color, display: "inline-block" } }),
                 s.name, s.total != null && React.createElement("b", { style: { color: "#fff" } }, React.createElement(Num, { value: s.total, fmt: fmtK, delay: j * 120 }))))));
 }
+// แถบเลื่อนอัตราค่าคอมฯ แบบย่อ: 5 ปีเรียงบรรทัดเดียว (v3.3)
+function RateSlider({ label, value, onChange, max }) {
+    const v = value == null ? 0 : Math.min(Math.max(value, 0), max);
+    const pct = (v / max) * 100;
+    return React.createElement("div", { style: { background: "#fff", borderRadius: 12, padding: "6px 8px 2px", border: "1px solid #D3E2EC", minWidth: 0 } },
+        React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 4 } },
+            React.createElement("span", { style: { fontSize: 14, fontWeight: 700, color: MUTE, whiteSpace: "nowrap" } }, label),
+            React.createElement("span", { style: { fontSize: 18, fontWeight: 800, color: NAVY, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" } }, `${v}%`)),
+        React.createElement("input", { type: "range", className: "slider", min: 0, max, step: 0.25, value: v, onChange: (ev) => onChange(Number(ev.target.value)), style: { margin: "10px 0 8px", background: `linear-gradient(90deg, ${SKY_DEEP} ${pct}%, #C9DCE8 ${pct}%)` } }));
+}
 function Slider({ label, value, onChange, min, max, step = 1, unit, color = SKY_DEEP, compact = false, fmt = (x) => x, minLabel, maxLabel }) {
     const v = value == null ? min : Math.min(Math.max(value, min), max);
     const pct = ((v - min) / (max - min)) * 100;
@@ -1669,7 +1679,7 @@ function computeAgent({ safePremium, modeKey, safeRates, safeCases, safePersist,
     }, { byYear: [0, 0, 0, 0, 0], commissionSubtotal: 0, quarterlyBonus: 0, annualBonus: 0, collectBonus: 0, careerBenefit: 0, qualReward: 0, joining: 0, grandTotal: 0 });
     return { keepRatio, yearPersist, annualPremiumPerCase, perCase, monthReport, totalCommission5y, totalPremium5y, yearGroups, yearlyStacked, chunkSizeMonths, totalPeriodsAll, periodTrend, quarters, annualBonusByYear, safeTenureStart, careerByYear, masterYearSummary, grand5y, careerY5, promo };
 }
-const APP_VERSION = "3.3 · 12/10/2026";
+const APP_VERSION = "3.4 · 12/10/2026";
 // สูงสุดของแถบเลื่อนอัตราค่าคอมฯ ปี 1–5 (อ้างอิงเอกสารค่าตอบแทนสามัญ 23-09-2026)
 const RATE_MAX = [40, 25, 10, 5, 5];
 // ===== แจ้งเตือนเวอร์ชันใหม่: เปิดแอป/กลับมาที่แอป จะเช็กไฟล์ล่าสุดบนเว็บ ถ้าใหม่กว่าจะขึ้นแถบแจ้งเตือนพร้อมวิธีอัปเดต =====
@@ -1944,8 +1954,8 @@ function CommissionPlanner() {
                     React.createElement("div", { style: { fontSize: 15, color: MUTE, marginTop: 4, lineHeight: 1.45 } }, "ใช้ลดคอมฯ ปีต่ออายุ (ปี 2–5) และใช้คำนวณโบนัสรายปี, CAREER และค่าส่งเสริมความคงอยู่ในแทป UM · ปีแรกของตัวแทนใหม่ใช้ 75% ตามระเบียบ เฉพาะคำนวณโบนัส"),
                     !present && React.createElement(MiniToggle, { title: "ตั้งค่าอัตราค่าคอมฯ และอายุงาน" },
                         React.createElement("div", { style: { fontSize: 16.5, color: NAVY, fontWeight: 700, marginBottom: 6 } }, "อัตราค่าคอมมิชชันตามปีกรมธรรม์ (%)"),
-                        React.createElement("div", { style: { display: "grid", gap: 10 } },
-                            [0, 1, 2, 3, 4].map((i) => React.createElement(Slider, { key: `rate${i}`, label: `ปีที่ ${i + 1}`, value: rates[i], onChange: (v) => setRate(i, v), min: 0, max: RATE_MAX[i], step: 0.25, unit: "%", compact: true, color: i === 0 ? NAVY : SKY_DEEP }))),
+                        React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(5, minmax(0,1fr))", gap: 8 } },
+                            [0, 1, 2, 3, 4].map((i) => React.createElement(RateSlider, { key: `rate${i}`, label: `ปี ${i + 1}`, value: rates[i], onChange: (v) => setRate(i, v), max: RATE_MAX[i] }))),
                         React.createElement("div", { style: { height: 12 } }),
                         React.createElement(NumField, { key: `tenure-${resetToken}`, label: "อายุงานตัวแทนปัจจุบัน (นับถึงปีที่ 1 ของแผนนี้)", value: tenureStart, onChange: setTenureStart, suffix: "ปี", step: 1, inputRef: (el) => (fieldRefs.current[7] = el), onEnterNext: () => focusField(8) }))),
                 (() => {
