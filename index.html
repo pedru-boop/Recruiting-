@@ -1669,7 +1669,9 @@ function computeAgent({ safePremium, modeKey, safeRates, safeCases, safePersist,
     }, { byYear: [0, 0, 0, 0, 0], commissionSubtotal: 0, quarterlyBonus: 0, annualBonus: 0, collectBonus: 0, careerBenefit: 0, qualReward: 0, joining: 0, grandTotal: 0 });
     return { keepRatio, yearPersist, annualPremiumPerCase, perCase, monthReport, totalCommission5y, totalPremium5y, yearGroups, yearlyStacked, chunkSizeMonths, totalPeriodsAll, periodTrend, quarters, annualBonusByYear, safeTenureStart, careerByYear, masterYearSummary, grand5y, careerY5, promo };
 }
-const APP_VERSION = "3.2 · 10/10/2026";
+const APP_VERSION = "3.3 · 12/10/2026";
+// สูงสุดของแถบเลื่อนอัตราค่าคอมฯ ปี 1–5 (อ้างอิงเอกสารค่าตอบแทนสามัญ 23-09-2026)
+const RATE_MAX = [40, 25, 10, 5, 5];
 // ===== แจ้งเตือนเวอร์ชันใหม่: เปิดแอป/กลับมาที่แอป จะเช็กไฟล์ล่าสุดบนเว็บ ถ้าใหม่กว่าจะขึ้นแถบแจ้งเตือนพร้อมวิธีอัปเดต =====
 const verNum = (v) => { const m = String(v || "").match(/(\d+)\.(\d+)/); return m ? +m[1] * 1000 + +m[2] : 0; };
 function UpdateBanner() {
@@ -1935,21 +1937,17 @@ function CommissionPlanner() {
                     React.createElement("div", { style: { fontSize: 17, color: NAVY, fontWeight: 700, marginBottom: 6 } }, "รูปแบบการชำระเบี้ย"),
                     React.createElement(Segmented, { options: MODES, value: modeKey, onChange: setModeKey }),
                     React.createElement("div", { style: { height: 12 } }),
-                    React.createElement(NumField, { key: `premium-${resetToken}`, label: `เบี้ยประกันต่องวด (${mode.label}) ต่อ 1 ราย`, value: premiumPerInstallment, onChange: setPremiumPerInstallment, suffix: "บาท/งวด", step: 100, inputRef: (el) => (fieldRefs.current[0] = el), onEnterNext: () => focusField(2) }),
+                    React.createElement(NumField, { key: `premium-${resetToken}`, label: `เบี้ยประกันต่องวด (${mode.label}) ต่อ 1 ราย`, value: premiumPerInstallment, onChange: setPremiumPerInstallment, suffix: "บาท/งวด", step: 100, inputRef: (el) => (fieldRefs.current[0] = el), onEnterNext: () => focusField(7) }),
                     React.createElement("div", { style: { fontSize: 16, color: MUTE, marginTop: 4 } }, `เทียบเท่าเบี้ยรายปีต่อราย ≈ ${THB(annualPremiumPerCase)} บาท/ปี`),
                     React.createElement(Slider, { label: "จำนวนรายที่ขายต่อเดือน", value: casesPerMonth, onChange: setCasesPerMonth, min: 1, max: Math.max(20, casesPerMonth || 0), unit: "ราย", color: NAVY }),
                     React.createElement(Slider, { label: "อัตราคงอยู่ของกรมธรรม์", value: persistency, onChange: setPersistency, min: 50, max: 100, unit: "%", color: GREEN_DEEP }),
                     React.createElement("div", { style: { fontSize: 15, color: MUTE, marginTop: 4, lineHeight: 1.45 } }, "ใช้ลดคอมฯ ปีต่ออายุ (ปี 2–5) และใช้คำนวณโบนัสรายปี, CAREER และค่าส่งเสริมความคงอยู่ในแทป UM · ปีแรกของตัวแทนใหม่ใช้ 75% ตามระเบียบ เฉพาะคำนวณโบนัส"),
                     !present && React.createElement(MiniToggle, { title: "ตั้งค่าอัตราค่าคอมฯ และอายุงาน" },
                         React.createElement("div", { style: { fontSize: 16.5, color: NAVY, fontWeight: 700, marginBottom: 6 } }, "อัตราค่าคอมมิชชันตามปีกรมธรรม์ (%)"),
-                        React.createElement("div", { style: { display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 6 } },
-                            [0, 1, 2, 3, 4].map((i) => React.createElement(NumField, { key: `rate${i}-${resetToken}`, label: `ปี ${i + 1}`, value: rates[i], onChange: (v) => setRate(i, v), suffix: "%", compact: true, step: 0.5, inputRef: (el) => (fieldRefs.current[2 + i] = el), onEnterNext: () => focusField(3 + i) }))),
+                        React.createElement("div", { style: { display: "grid", gap: 10 } },
+                            [0, 1, 2, 3, 4].map((i) => React.createElement(Slider, { key: `rate${i}`, label: `ปีที่ ${i + 1}`, value: rates[i], onChange: (v) => setRate(i, v), min: 0, max: RATE_MAX[i], step: 0.25, unit: "%", compact: true, color: i === 0 ? NAVY : SKY_DEEP }))),
                         React.createElement("div", { style: { height: 12 } }),
-                        React.createElement(NumField, { key: `tenure-${resetToken}`, label: "อายุงานตัวแทนปัจจุบัน (นับถึงปีที่ 1 ของแผนนี้)", value: tenureStart, onChange: setTenureStart, suffix: "ปี", step: 1, inputRef: (el) => (fieldRefs.current[7] = el), onEnterNext: () => focusField(8) }),
-                        React.createElement("div", { style: { fontSize: 15, color: MUTE, marginTop: 4 } }, "ใช้คำนวณ CAREER — อายุงานเพิ่มปีละ 1 ปีตามที่จำลอง ต้องมีอายุงาน 2 ปีขึ้นไปจึงเข้าเกณฑ์"),
-                        modeKey === "monthly" && React.createElement("div", { style: { marginTop: 10, background: "#fff", borderRadius: 12, padding: 10, fontSize: 15.5, color: MUTE, lineHeight: 1.5 } },
-                            React.createElement("b", { style: { color: NAVY } }, "เงื่อนไขการหักบัญชีรายเดือน (ปีแรก): "),
-                            "เดือนแรกหักล่วงหน้า 2 เดือน แล้วเว้น 1 เดือน จากนั้นหักปกติทุกเดือน (ปีต่ออายุหักปกติทุกเดือน)"))),
+                        React.createElement(NumField, { key: `tenure-${resetToken}`, label: "อายุงานตัวแทนปัจจุบัน (นับถึงปีที่ 1 ของแผนนี้)", value: tenureStart, onChange: setTenureStart, suffix: "ปี", step: 1, inputRef: (el) => (fieldRefs.current[7] = el), onEnterNext: () => focusField(8) }))),
                 (() => {
                     const series = [
                         { name: "คอมฯ ปีแรก", color: SKY, total: grand5y.byYear[0] },
